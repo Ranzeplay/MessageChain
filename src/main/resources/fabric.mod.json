@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "messagechain",
+  "version": "${version}",
+  "name": "MessageChain",
+  "description": "",
+  "authors": [],
+  "contact": {
+    "repo": "https://github.com/如果/MessageChain"
+  },
+  "license": "Apache-2.0",
+  "icon": "assets/messagechain/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "me.ranzeplay.messagechain.client.MessageChainClient"
+    ],
+    "main": [
+      "me.ranzeplay.messagechain.MessageChain"
+    ]
+  },
+  "mixins": [
+    "messagechain.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
