@@ -34,7 +34,7 @@ public class CommPacket<T extends AbstractNBTSerializable> {
 
         var superClass = (ParameterizedType) getClass().getGenericSuperclass();
         var clazz = (Class<T>) superClass.getActualTypeArguments()[0];
-        var payload = clazz.newInstance();
+        var payload = clazz.getConstructor().newInstance();
         payload.fromNbt(buf.readNbt());
         this.payload = payload;
     }

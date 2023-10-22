@@ -15,9 +15,9 @@ import net.minecraft.util.Identifier;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 public class LocalRequestManager {
     private static LocalRequestManager INSTANCE;
@@ -90,7 +90,7 @@ public class LocalRequestManager {
         var commPacketId = buf.readUuid();
         var obj = requestMap.get(commPacketId);
 
-        var nbt = buf.readNbt();
+        var nbt = Objects.requireNonNull(buf.readNbt());
         var response = new RouteResponse(nbt, obj.getResponseClass());
         obj.setResponseData(response);
 

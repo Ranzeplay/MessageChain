@@ -29,10 +29,10 @@ public class ExampleRouteTest extends AbstractRouteExecutor<ExampleData, Example
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess)
                 -> dispatcher.register(ClientCommandManager.literal("msg_chain_test")
                 .executes(context -> {
-                    LocalRequestManager.getInstance().sendThreadedRequest(ROUTE_IDENTIFIER, new ExampleData("hello"), ExampleData.class, response -> {
-                        Objects.requireNonNull(MinecraftClient.getInstance().player)
-                                .sendMessage(Text.literal(response.getSuccessResponse().getMessage()));
-                    });
+                    LocalRequestManager.getInstance().sendThreadedRequest(ROUTE_IDENTIFIER, new ExampleData("hello"), ExampleData.class,
+                            response -> Objects.requireNonNull(MinecraftClient.getInstance().player)
+                                    .sendMessage(Text.literal(response.getSuccessResponse().getMessage()))
+                    );
                     return Command.SINGLE_SUCCESS;
                 })
         ));
