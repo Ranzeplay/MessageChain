@@ -33,6 +33,7 @@ public class RouteResponse<TSuccess extends AbstractNBTSerializable> extends Abs
         if(success) {
             var successData = successClass.newInstance();
             successData.fromNbt(nbt.getCompound("payload"));
+            successResponse = successData;
         } else {
             failedReason = nbt.getString("reason");
         }

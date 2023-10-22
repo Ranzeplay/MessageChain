@@ -7,7 +7,11 @@ import me.ranzeplay.messagechain.models.AbstractRouteExecutor;
 import me.ranzeplay.messagechain.models.RouteHandler;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+
+import java.util.Objects;
 
 public class ExampleRouteTest extends AbstractRouteExecutor<ExampleData, ExampleData> {
     private static final Identifier ROUTE_IDENTIFIER = new Identifier("message_chain.networking.route", "test");
@@ -21,14 +25,17 @@ public class ExampleRouteTest extends AbstractRouteExecutor<ExampleData, Example
     }
 
     public static void registerCommands() {
-        ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
-            dispatcher.register(ClientCommandManager.literal("msg_chain_test")
-                    .executes(context -> {
-                        new Thread(() -> LocalRequestManager.getInstance().sendRequest(ROUTE_IDENTIFIER, new ExampleData("hello"), ExampleData.class)).start();
-                        return Command.SINGLE_SUCCESS;
-                    })
-            );
-        });
+        ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess)
+                -> dispatcher.register(ClientCommandManager.literal("msg_chain_test")
+                .executes(context -> {
+                    new Thread(() -> {
+                        var response = LocalRequestManager.getInstance().sendRequest(ROUTE_IDENTIFIER, new ExampleData("hello"), ExampleData.class);
+                        Objects.requireNonNull(MinecraftClient.getInstance().player)
+                                .sendMessage(Text.literal(response.getSuccessResponse().getMessage()));
+                    }).start();
+                    return Command.SINGLE_SUCCESS;
+                })
+        ));
     }
 
     @Override
