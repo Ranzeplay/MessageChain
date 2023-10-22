@@ -30,10 +30,18 @@ public class RemoteRouteManager {
         return INSTANCE;
     }
 
+    /**
+     * Register a new route handler
+     *
+     * @param handler The route handler to be registered.
+     */
     public void registerRoute(RouteHandler<?, ?> handler) {
         routeRegistry.put(handler.getRoute(), handler);
     }
 
+    /**
+     * Unregister an existing route handler
+     */
     public void unregisterRoute(Identifier route) {
         routeRegistry.remove(route);
     }
@@ -46,11 +54,13 @@ public class RemoteRouteManager {
     private void handleNetworking(MinecraftServer server, ServerPlayerEntity playerSender, ServerPlayNetworkHandler networkHandler, PacketByteBuf buf, PacketSender packetSender) {
         var packetId = buf.readUuid();
         var param = buf.readNbt();
+        assert param != null;
         var routeIdRaw = param.getString("path").split("-");
         var routeId = new Identifier(routeIdRaw[0], routeIdRaw[1]);
 
         var route = routeRegistry.get(routeId);
         var payloadObjectSuper = route.getPayloadClazz()
+                .getConstructor()
                 .newInstance()
                 .loadFromNbt(param.getCompound("payload"));
         var payloadObject = route.getPayloadClazz()

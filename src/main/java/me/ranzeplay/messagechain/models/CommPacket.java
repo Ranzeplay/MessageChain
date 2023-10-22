@@ -9,9 +9,16 @@ import net.minecraft.network.PacketByteBuf;
 import java.lang.reflect.ParameterizedType;
 import java.util.UUID;
 
+/**
+ * MessageChain sends packets to server or client using CommPacket, it then serialized to PacketByteBuf to send to server and then deserialized to original.
+ * @param <T> Data type loaded to packet
+ */
 @AllArgsConstructor
 @Getter
 public class CommPacket<T extends AbstractNBTSerializable> {
+    /**
+     * Packet ID, used to uniquely identify packets, which is used to trace response from the server.
+     */
     UUID id;
     T payload;
 

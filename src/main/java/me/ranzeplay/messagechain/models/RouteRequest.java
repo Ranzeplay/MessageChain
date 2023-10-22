@@ -9,6 +9,10 @@ import net.minecraft.util.Identifier;
 
 import java.lang.reflect.ParameterizedType;
 
+/**
+ * Wrap the request with RouteRequest
+ * @param <TPayload> Type of payload that sends to server, should match the payload type that registered on server-side.
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter

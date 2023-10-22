@@ -9,6 +9,10 @@ import org.apache.commons.lang3.NotImplementedException;
 
 import java.lang.reflect.ParameterizedType;
 
+/**
+ * Data structure to wrap data returned from the server.
+ * @param <TSuccess> Actual data returning from the server, if it failed to process, it should be String containing a reason, and `success` set to `false`.
+ */
 @NoArgsConstructor
 @Setter
 @Getter
@@ -17,11 +21,19 @@ public class RouteResponse<TSuccess extends AbstractNBTSerializable> extends Abs
     TSuccess successResponse;
     String failedReason;
 
+    /**
+     * Create the object with a successful response.
+     * @param successResponse Returning data
+     */
     public RouteResponse(TSuccess successResponse) {
         this.success = true;
         this.successResponse = successResponse;
     }
 
+    /**
+     * Create the object with a failed response
+     * @param failedReason The reason of failing to process data.
+     */
     public RouteResponse(String failedReason) {
         this.success = false;
         this.failedReason = failedReason;

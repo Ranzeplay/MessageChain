@@ -29,6 +29,15 @@ public class LocalRequestManager {
         return INSTANCE;
     }
 
+    /**
+     * Use a new thread to make requests
+     * @param route Target route to server
+     * @param payload Payload that sends to server
+     * @param successClass Returning data type when successfully processed data
+     * @param <TPayload> Payload type
+     * @param <TSuccess> Success type
+     * @return Response data
+     */
     @SneakyThrows
     public <TPayload extends AbstractNBTSerializable, TSuccess extends AbstractNBTSerializable> RouteResponse<TSuccess> sendRequest(Identifier route, TPayload payload, Class<TSuccess> successClass) {
         var id = UUID.randomUUID();
