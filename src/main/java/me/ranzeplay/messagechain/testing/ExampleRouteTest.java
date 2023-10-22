@@ -5,6 +5,7 @@ import me.ranzeplay.messagechain.managers.LocalRequestManager;
 import me.ranzeplay.messagechain.managers.RemoteRouteManager;
 import me.ranzeplay.messagechain.models.AbstractRouteExecutor;
 import me.ranzeplay.messagechain.models.RouteHandler;
+import me.ranzeplay.messagechain.models.RouteRequestContext;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.minecraft.client.MinecraftClient;
@@ -39,7 +40,8 @@ public class ExampleRouteTest extends AbstractRouteExecutor<ExampleData, Example
     }
 
     @Override
-    public ExampleData apply(ExampleData exampleData) {
+    public ExampleData apply(RouteRequestContext<ExampleData> context) {
+        var exampleData = context.getPayload();
         exampleData.setMessage(String.format("You are right, but %s", exampleData.getMessage()));
         return exampleData;
     }

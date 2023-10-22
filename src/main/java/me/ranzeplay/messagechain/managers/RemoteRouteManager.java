@@ -4,6 +4,7 @@ import lombok.SneakyThrows;
 import me.ranzeplay.messagechain.MessageChain;
 import me.ranzeplay.messagechain.models.CommPacket;
 import me.ranzeplay.messagechain.models.RouteHandler;
+import me.ranzeplay.messagechain.models.RouteRequestContext;
 import me.ranzeplay.messagechain.models.RouteResponse;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -66,7 +67,7 @@ public class RemoteRouteManager {
         var payloadObject = route.getPayloadClazz()
                 .cast(payloadObjectSuper);
 
-        var executionResult = route.getSuccessClazz().cast(route.getAction().apply(payloadObject));
+        var executionResult = route.getSuccessClazz().cast(route.getAction().apply(new RouteRequestContext<>(packetId, routeId, payloadObject, server, playerSender, networkHandler, packetSender)));
 
         var response = new RouteResponse<>(executionResult);
         var packet = new CommPacket<>(packetId, response);
