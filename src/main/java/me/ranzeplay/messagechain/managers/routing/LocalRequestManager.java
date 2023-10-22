@@ -16,6 +16,8 @@ import net.minecraft.util.Identifier;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class LocalRequestManager {
     private static LocalRequestManager INSTANCE;
@@ -33,7 +35,7 @@ public class LocalRequestManager {
     }
 
     /**
-     * Use a new thread to make requests
+     * Send a request to the server with custom data provided
      * @param route Target route to server
      * @param payload Payload that sends to server
      * @param successClass Returning data type when successfully processed data
@@ -61,6 +63,22 @@ public class LocalRequestManager {
         requestMap.remove(id);
 
         return (RouteResponse<TSuccess>) response.getResponseData();
+    }
+
+    /**
+     * Send a request to the server with custom data provided using a new thread.
+     * @param route Target route to server.
+     * @param payload Payload that sends to server.
+     * @param successClass Returning data type when successfully processed data.
+     * @param <TPayload> Payload type.
+     * @param <TSuccess> Success type.
+     * @param afterResponse Actions when receiving response.
+     */
+    public <TPayload extends AbstractNBTSerializable, TSuccess extends AbstractNBTSerializable> void sendThreadedRequest(Identifier route, TPayload payload, Class<TSuccess> successClass, Consumer<RouteResponse<TSuccess>> afterResponse) {
+        new Thread(() -> {
+            var response = sendRequest(route, payload, successClass);
+            afterResponse.accept(response);
+        }).start();
     }
 
     private void registerEvents() {
