@@ -1,13 +1,12 @@
-package me.ranzeplay.messagechain.models;
+package me.ranzeplay.messagechain.models.routing;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.SneakyThrows;
+import me.ranzeplay.messagechain.models.AbstractNBTSerializable;
 import net.minecraft.nbt.NbtCompound;
 import org.apache.commons.lang3.NotImplementedException;
-
-import java.lang.reflect.ParameterizedType;
 
 /**
  * Data structure to wrap data returned from the server.

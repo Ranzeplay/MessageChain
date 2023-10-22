@@ -1,11 +1,11 @@
-package me.ranzeplay.messagechain.managers;
+package me.ranzeplay.messagechain.managers.routing;
 
 import lombok.SneakyThrows;
 import me.ranzeplay.messagechain.MessageChain;
 import me.ranzeplay.messagechain.models.CommPacket;
-import me.ranzeplay.messagechain.models.RouteHandler;
-import me.ranzeplay.messagechain.models.RouteRequestContext;
-import me.ranzeplay.messagechain.models.RouteResponse;
+import me.ranzeplay.messagechain.models.routing.RouteHandler;
+import me.ranzeplay.messagechain.models.routing.RouteRequestContext;
+import me.ranzeplay.messagechain.models.routing.RouteResponse;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.PacketByteBuf;

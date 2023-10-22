@@ -1,8 +1,9 @@
-package me.ranzeplay.messagechain.models;
+package me.ranzeplay.messagechain.models.routing;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
+import me.ranzeplay.messagechain.models.AbstractNBTSerializable;
 
 import java.util.UUID;
 

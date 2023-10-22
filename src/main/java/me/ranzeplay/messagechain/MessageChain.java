@@ -1,6 +1,6 @@
 package me.ranzeplay.messagechain;
 
-import me.ranzeplay.messagechain.managers.RemoteRouteManager;
+import me.ranzeplay.messagechain.managers.routing.RemoteRouteManager;
 import me.ranzeplay.messagechain.testing.ExampleRouteTest;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.util.Identifier;

@@ -1,5 +1,7 @@
-package me.ranzeplay.messagechain.models;
+package me.ranzeplay.messagechain.models.routing;
 
+
+import me.ranzeplay.messagechain.models.AbstractNBTSerializable;
 
 import java.util.function.Function;
 

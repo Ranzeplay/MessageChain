@@ -1,6 +1,6 @@
 package me.ranzeplay.messagechain.client;
 
-import me.ranzeplay.messagechain.managers.LocalRequestManager;
+import me.ranzeplay.messagechain.managers.routing.LocalRequestManager;
 import me.ranzeplay.messagechain.testing.ExampleRouteTest;
 import net.fabricmc.api.ClientModInitializer;
 
