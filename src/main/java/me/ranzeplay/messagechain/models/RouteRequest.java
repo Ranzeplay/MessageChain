@@ -13,13 +13,13 @@ import java.lang.reflect.ParameterizedType;
 @NoArgsConstructor
 @Getter
 public class RouteRequest<TPayload extends AbstractNBTSerializable> extends AbstractNBTSerializable {
-    Identifier path;
+    Identifier route;
     TPayload payload;
 
     @Override
     public NbtCompound toNbt() {
         var nbt = new NbtCompound();
-        nbt.putString("path", path.getNamespace() + "-" + path.getPath());
+        nbt.putString("path", route.getNamespace() + "-" + route.getPath());
         nbt.put("payload", payload.toNbt());
         return nbt;
     }
@@ -29,7 +29,7 @@ public class RouteRequest<TPayload extends AbstractNBTSerializable> extends Abst
     public void fromNbt(NbtCompound nbt) {
         // Decode path
         var path = nbt.getString("path").split("-");
-        this.path = new Identifier(path[0], path[1]);
+        this.route = new Identifier(path[0], path[1]);
 
         var superClass = (ParameterizedType) getClass().getGenericSuperclass();
         var clazz = (Class<TPayload>) superClass.getActualTypeArguments()[0];
