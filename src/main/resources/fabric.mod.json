@@ -26,5 +26,19 @@
     "fabricloader": ">=${loader_version}",
     "fabric": "*",
     "minecraft": ">=${minecraft_version}"
+  },
+  "suggests": {
+    "modmenu": ">=7.0.1"
+  },
+  "custom": {
+    "modmenu": {
+      "links": {
+        "modmenu.modrinth": "https://modrinth.com/mod/messagechain",
+        "modmenu.source": "https://github.com/Ranzeplay/MessageChain",
+        "modmenu.issues": "https://github.com/Ranzeplay/MessageChain/issues"
+      },
+      "badges": ["library", "client", "server"],
+      "update_checker": true
+    }
   }
 }
