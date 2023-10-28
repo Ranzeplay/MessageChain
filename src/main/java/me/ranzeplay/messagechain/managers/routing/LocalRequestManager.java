@@ -72,12 +72,12 @@ public class LocalRequestManager {
      * @param successClass Returning data type when successfully processed data.
      * @param <TPayload> Payload type.
      * @param <TSuccess> Success type.
-     * @param afterResponse Actions when receiving response.
+     * @param callback Actions when receiving response.
      */
-    public <TPayload extends AbstractNBTSerializable, TSuccess extends AbstractNBTSerializable> void sendThreadedRequest(Identifier route, TPayload payload, Class<TSuccess> successClass, Consumer<RouteResponse<TSuccess>> afterResponse) {
+    public <TPayload extends AbstractNBTSerializable, TSuccess extends AbstractNBTSerializable> void sendThreadedRequest(Identifier route, TPayload payload, Class<TSuccess> successClass, Consumer<RouteResponse<TSuccess>> callback) {
         new Thread(() -> {
             var response = sendRequest(route, payload, successClass);
-            afterResponse.accept(response);
+            callback.accept(response);
         }).start();
     }
 
