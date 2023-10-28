@@ -2,13 +2,17 @@ package me.ranzeplay.messagechain.testing;
 
 import lombok.*;
 import me.ranzeplay.messagechain.models.AbstractNBTSerializable;
+import me.ranzeplay.messagechain.nbtutils.NBTSerializable;
+import me.ranzeplay.messagechain.nbtutils.NBTSerializableEntry;
 import net.minecraft.nbt.NbtCompound;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
+@NBTSerializable
 public class ExampleData extends AbstractNBTSerializable {
+    @NBTSerializableEntry(key = "message")
     private String message;
 
     @Override

@@ -1,8 +1,8 @@
 package me.ranzeplay.messagechain.testing;
 
 import com.mojang.brigadier.Command;
-import me.ranzeplay.messagechain.managers.notification.NotificationManager;
 import me.ranzeplay.messagechain.models.notification.AbstractNotificationHandler;
+import me.ranzeplay.messagechain.managers.notification.NotificationManager;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.server.command.CommandManager;
