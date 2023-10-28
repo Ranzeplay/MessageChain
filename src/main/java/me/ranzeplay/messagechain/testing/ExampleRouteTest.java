@@ -27,7 +27,7 @@ public class ExampleRouteTest extends AbstractRouteExecutor<ExampleData, Example
 
     public static void registerCommands() {
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess)
-                -> dispatcher.register(ClientCommandManager.literal("msg_chain_test")
+                -> dispatcher.register(ClientCommandManager.literal("msgc_test_routing")
                 .executes(context -> {
                     LocalRequestManager.getInstance().sendThreadedRequest(ROUTE_IDENTIFIER, new ExampleData("hello"), ExampleData.class,
                             response -> Objects.requireNonNull(MinecraftClient.getInstance().player)
@@ -41,7 +41,7 @@ public class ExampleRouteTest extends AbstractRouteExecutor<ExampleData, Example
     @Override
     public ExampleData apply(RouteRequestContext<ExampleData> context) {
         var exampleData = context.getPayload();
-        exampleData.setMessage(String.format("You are right, but %s", exampleData.getMessage()));
+        exampleData.setMessage(String.format("Testing routing: %s", exampleData.getMessage()));
         return exampleData;
     }
 }
