@@ -22,7 +22,7 @@ import java.util.function.Consumer;
 public class LocalRequestManager {
     private static LocalRequestManager INSTANCE;
 
-    public Map<UUID, RouteRequestCache<?, ?>> requestMap;
+    private Map<UUID, RouteRequestCache<?, ?>> requestMap;
 
     public LocalRequestManager() {
         requestMap = new HashMap<>();
