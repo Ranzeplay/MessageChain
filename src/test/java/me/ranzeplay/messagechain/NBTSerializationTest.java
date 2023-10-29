@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import me.ranzeplay.messagechain.nbtutils.NBTHelper;
 import me.ranzeplay.messagechain.nbtutils.NBTSerializable;
-import me.ranzeplay.messagechain.nbtutils.NBTSerializableEntry;
+import me.ranzeplay.messagechain.nbtutils.NBTSerializationEntry;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -17,15 +17,15 @@ public class NBTSerializationTest {
     @NBTSerializable
     @NoArgsConstructor
     static class MasterContent {
-        @NBTSerializableEntry
+        @NBTSerializationEntry
         String a;
-        @NBTSerializableEntry
+        @NBTSerializationEntry
         long b;
-        @NBTSerializableEntry
+        @NBTSerializationEntry
         ArrayList<SubContent> subContents;
-        @NBTSerializableEntry
+        @NBTSerializationEntry
         ArrayList<String> stringArrayList;
-        @NBTSerializableEntry
+        @NBTSerializationEntry
         SubContent sub;
     }
 
@@ -33,12 +33,11 @@ public class NBTSerializationTest {
     @NBTSerializable
     @NoArgsConstructor
     static class SubContent {
-
-        @NBTSerializableEntry
+        @NBTSerializationEntry
         int a;
-        @NBTSerializableEntry
+        @NBTSerializationEntry
         int b;
-        @NBTSerializableEntry
+        @NBTSerializationEntry
         int[] arr;
     }
 

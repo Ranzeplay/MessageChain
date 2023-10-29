@@ -4,7 +4,6 @@ import lombok.SneakyThrows;
 import net.minecraft.nbt.*;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -31,7 +30,7 @@ public class NBTHelper {
             var result = new NbtCompound();
             for (var field : typeClass.getDeclaredFields()) {
                 field.setAccessible(true);
-                if (field.isAnnotationPresent(NBTSerializableEntry.class)) {
+                if (field.isAnnotationPresent(NBTSerializationEntry.class)) {
                     var element = serializeField(source, field);
                     result.put(getNbtFieldName(field), element);
                 }
@@ -148,7 +147,7 @@ public class NBTHelper {
             var result = constructor.newInstance();
 
             var fields = Arrays.stream(targetType.getDeclaredFields())
-                    .filter(f -> f.isAnnotationPresent(NBTSerializableEntry.class))
+                    .filter(f -> f.isAnnotationPresent(NBTSerializationEntry.class))
                     .collect(Collectors.toCollection(ArrayList::new));
             for (var field : fields) {
                 var subElement = nbt.get(getNbtFieldName(field));
@@ -163,7 +162,7 @@ public class NBTHelper {
 
     private static String getNbtFieldName(Field field) {
         field.setAccessible(true);
-        var entryAnnotation = field.getAnnotation(NBTSerializableEntry.class);
+        var entryAnnotation = field.getAnnotation(NBTSerializationEntry.class);
         return Objects.equals(entryAnnotation.key(), "") ? field.getName() : entryAnnotation.key();
     }
 }

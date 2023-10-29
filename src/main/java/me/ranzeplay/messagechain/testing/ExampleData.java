@@ -2,8 +2,6 @@ package me.ranzeplay.messagechain.testing;
 
 import lombok.*;
 import me.ranzeplay.messagechain.models.AbstractNBTSerializable;
-import me.ranzeplay.messagechain.nbtutils.NBTSerializable;
-import me.ranzeplay.messagechain.nbtutils.NBTSerializableEntry;
 import net.minecraft.nbt.NbtCompound;
 
 @AllArgsConstructor
