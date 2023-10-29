@@ -10,9 +10,7 @@ import net.minecraft.nbt.NbtCompound;
 @NoArgsConstructor
 @Getter
 @Setter
-@NBTSerializable
 public class ExampleData extends AbstractNBTSerializable {
-    @NBTSerializableEntry(key = "message")
     private String message;
 
     @Override

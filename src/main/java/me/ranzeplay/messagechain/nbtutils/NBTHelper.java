@@ -1,67 +1,84 @@
 package me.ranzeplay.messagechain.nbtutils;
 
 import lombok.SneakyThrows;
-import me.ranzeplay.messagechain.models.AbstractNBTSerializable;
 import net.minecraft.nbt.*;
 
 import java.lang.reflect.Field;
-import java.util.List;
+import java.util.AbstractList;
+import java.util.Objects;
 
 public class NBTHelper {
     @SneakyThrows
     public static <T> NbtCompound serialize(T source) {
         var clazz = source.getClass();
         if (clazz.isAnnotationPresent(NBTSerializable.class)) {
-            var result = new NbtCompound();
+            return serializeClass(source);
+        } else {
+            throw new ReflectiveOperationException("NBTSerializable annotation required.");
+        }
+    }
 
-            for (var field : clazz.getDeclaredFields()) {
+    private static NbtElement serializeObject(Object source) {
+        var result = serializeBasicType(source);
+        if (result == null) return serializeClass(source);
+        else return result;
+    }
+
+    private static NbtCompound serializeClass(Object source) {
+        var typeClass = source.getClass();
+        if (typeClass.isAnnotationPresent(NBTSerializable.class)) {
+            var result = new NbtCompound();
+            for (var field : typeClass.getDeclaredFields()) {
                 field.setAccessible(true);
                 if (field.isAnnotationPresent(NBTSerializableEntry.class)) {
                     var element = serializeField(source, field);
                     var entryAnnotation = field.getAnnotation(NBTSerializableEntry.class);
-                    result.put(entryAnnotation.key(), element);
+                    result.put(Objects.equals(entryAnnotation.key(), "") ? field.getName() : entryAnnotation.key(), element);
                 }
             }
 
             return result;
         } else {
-            throw new ReflectiveOperationException("NBTSerializable annotation required.");
+            return null;
         }
     }
 
     @SneakyThrows
     private static NbtElement serializeField(Object o, Field source) {
         source.setAccessible(true);
+        return serializeObject(source.get(o));
+    }
 
-        var typeClass = source.getType();
+    // TODO: Implement serialization for Map<K, V>
+    private static NbtElement serializeBasicType(Object source) {
+        var typeClass = source.getClass();
         if (typeClass.isAssignableFrom(Integer.class)) {
-            return NbtInt.of(source.getInt(o));
+            return NbtInt.of((int) source);
         } else if (typeClass.isAssignableFrom(Short.class)) {
-            return NbtShort.of(source.getShort(o));
+            return NbtShort.of((short) source);
         } else if (typeClass.isAssignableFrom(Long.class)) {
-            return NbtLong.of(source.getLong(o));
+            return NbtLong.of((long) source);
         } else if (typeClass.isAssignableFrom(Float.class)) {
-            return NbtFloat.of(source.getFloat(o));
+            return NbtFloat.of((float) source);
         } else if (typeClass.isAssignableFrom(Double.class)) {
-            return NbtDouble.of(source.getDouble(o));
+            return NbtDouble.of((double) source);
         } else if (typeClass.isAssignableFrom(Integer[].class)) {
-            return new NbtIntArray((int[]) source.get(o));
+            return new NbtIntArray((int[]) source);
         } else if (typeClass.isAssignableFrom(Byte[].class)) {
-            return new NbtByteArray((byte[]) source.get(o));
+            return new NbtByteArray((byte[]) source);
         } else if (typeClass.isAssignableFrom(Long[].class)) {
-            return new NbtLongArray((long[]) source.get(o));
+            return new NbtLongArray((long[]) source);
         } else if (typeClass.isAssignableFrom(String.class)) {
-            return NbtString.of(String.valueOf(source.get(o)));
-        } else if (typeClass.isAssignableFrom(List.class)) {
-            List<AbstractNBTSerializable> list = (List) source.get(o);
+            return NbtString.of(String.valueOf(source));
+        } else if (typeClass.getSuperclass() == AbstractList.class) {
+            AbstractList list = (AbstractList) source;
             var obj = new NbtList();
             for (var item : list) {
-                obj.add(item.toNbt());
+                obj.add(serializeObject(item));
             }
             return obj;
         } else {
-            var obj = typeClass.cast(source.get(o));
-            return serialize(obj);
+            return null;
         }
     }
 }
