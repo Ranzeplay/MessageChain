@@ -2,9 +2,11 @@ package me.ranzeplay.messagechain;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import me.ranzeplay.messagechain.models.AbstractNBTSerializable;
 import me.ranzeplay.messagechain.nbtutils.NBTHelper;
 import me.ranzeplay.messagechain.nbtutils.NBTSerializable;
 import me.ranzeplay.messagechain.nbtutils.NBTSerializationEntry;
+import net.minecraft.nbt.NbtCompound;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -41,6 +43,33 @@ public class NBTSerializationTest {
         int[] arr;
     }
 
+    @AllArgsConstructor
+    @NBTSerializable
+    @NoArgsConstructor
+    static class Another extends AbstractNBTSerializable {
+        @NBTSerializationEntry
+        int a;
+        @NBTSerializationEntry
+        String b;
+
+        @Override
+        public NbtCompound toNbt() {
+            return NBTHelper.serialize(this);
+        }
+
+        @Override
+        public void fromNbt(NbtCompound nbt) {
+            var deserializationResult = NBTHelper.deserialize(nbt, Another.class);
+            a = deserializationResult.a;
+            b = deserializationResult.b;
+        }
+
+        @Override
+        public Class<?> getGenericClass() {
+            return Another.class;
+        }
+    }
+
     MasterContent content;
 
     @BeforeEach
@@ -67,5 +96,15 @@ public class NBTSerializationTest {
         var result = NBTHelper.deserialize(nbt, MasterContent.class);
 
         assertEquals(233, result.b);
+    }
+
+    @Test
+    public void testInheritance() {
+        var model = new Another(3, "another");
+        var nbt = model.toNbt();
+        var back = new Another();
+        back.fromNbt(nbt);
+
+        assertEquals("another", back.b);
     }
 }
