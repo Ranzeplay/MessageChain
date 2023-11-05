@@ -11,6 +11,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -29,6 +31,8 @@ public class NBTSerializationTest {
         ArrayList<String> stringArrayList;
         @NBTSerializationEntry
         SubContent sub;
+        @NBTSerializationEntry
+        Map<Integer, String> mapStore;
     }
 
     @AllArgsConstructor
@@ -74,7 +78,11 @@ public class NBTSerializationTest {
 
     @BeforeEach
     public void setup() {
-        var data = new MasterContent("hello", 233, new ArrayList<>(), new ArrayList<>(), new SubContent(2, 3, new int[]{2, 3, 4}));
+        var map = new HashMap<Integer, String>();
+        map.put(1, "foo");
+        map.put(2, "bar");
+
+        var data = new MasterContent("hello", 233, new ArrayList<>(), new ArrayList<>(), new SubContent(2, 3, new int[]{2, 3, 4}), map);
         data.stringArrayList.add("MessageChain");
         data.stringArrayList.add("hNation");
         data.stringArrayList.add("Jeb Feng");

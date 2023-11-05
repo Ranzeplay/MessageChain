@@ -73,10 +73,10 @@ public class NBTHelper {
             AbstractList list = (AbstractList) source;
             var obj = new NbtCompound();
             // Put content type to the first
-            if(!list.isEmpty()) {
-                obj.putString("type", list.get(0).getClass().getTypeName());
-            } else {
+            if (list.isEmpty()) {
                 obj.putString("type", "?");
+            } else {
+                obj.putString("type", list.get(0).getClass().getTypeName());
             }
             var nbtList = new NbtList();
             for (var item : list) {
@@ -84,7 +84,40 @@ public class NBTHelper {
             }
             obj.put("items", nbtList);
             return obj;
-        } else {
+        } else if (typeClass.getSuperclass() == AbstractMap.class) {
+            AbstractMap map = (AbstractMap) source;
+            var obj = new NbtCompound();
+            if(map.isEmpty()) {
+                obj.putString("keyType", "?");
+                obj.putString("valueType", "?");
+            } else {
+                var it = map.entrySet().iterator();
+                var list = new NbtList();
+                while(it.hasNext()) {
+                    var itemComp = new NbtCompound();
+                    var entry = (Map.Entry) it.next();
+                    var keySerializationResult = serializeObject(entry.getKey());
+                    var valueSerializationResult = serializeObject(entry.getValue());
+                    if(keySerializationResult != null && valueSerializationResult != null) {
+                        itemComp.put("key", keySerializationResult);
+                        itemComp.put("value", valueSerializationResult);
+                        list.add(itemComp);
+
+                        if(!obj.contains("keyType") || !obj.contains("valueType")) {
+                            obj.putString("keyType", entry.getKey().getClass().getTypeName());
+                            obj.putString("valueType", entry.getValue().getClass().getTypeName());
+                        }
+                    } else {
+                        return obj;
+                    }
+                }
+
+                obj.put("items", list);
+            }
+
+            return obj;
+        }
+        else {
             return null;
         }
     }
