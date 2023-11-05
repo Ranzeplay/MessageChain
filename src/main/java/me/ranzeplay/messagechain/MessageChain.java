@@ -1,7 +1,6 @@
 package me.ranzeplay.messagechain;
 
 import me.ranzeplay.messagechain.managers.notification.NotificationManager;
-import me.ranzeplay.messagechain.managers.subscription.DataSubscriptionManager;
 import me.ranzeplay.messagechain.managers.routing.RemoteRouteManager;
 import me.ranzeplay.messagechain.testing.ExampleNotificationTest;
 import me.ranzeplay.messagechain.testing.ExampleRouteTest;
