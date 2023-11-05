@@ -4,6 +4,7 @@ import lombok.SneakyThrows;
 import net.minecraft.nbt.*;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -85,25 +86,25 @@ public class NBTHelper {
             obj.put("items", nbtList);
             return obj;
         } else if (typeClass.getSuperclass() == AbstractMap.class) {
-            AbstractMap map = (AbstractMap) source;
+            Map map = (Map) source;
             var obj = new NbtCompound();
-            if(map.isEmpty()) {
+            if (map.isEmpty()) {
                 obj.putString("keyType", "?");
                 obj.putString("valueType", "?");
             } else {
                 var it = map.entrySet().iterator();
                 var list = new NbtList();
-                while(it.hasNext()) {
+                while (it.hasNext()) {
                     var itemComp = new NbtCompound();
                     var entry = (Map.Entry) it.next();
                     var keySerializationResult = serializeObject(entry.getKey());
                     var valueSerializationResult = serializeObject(entry.getValue());
-                    if(keySerializationResult != null && valueSerializationResult != null) {
+                    if (keySerializationResult != null && valueSerializationResult != null) {
                         itemComp.put("key", keySerializationResult);
                         itemComp.put("value", valueSerializationResult);
                         list.add(itemComp);
 
-                        if(!obj.contains("keyType") || !obj.contains("valueType")) {
+                        if (!obj.contains("keyType") || !obj.contains("valueType")) {
                             obj.putString("keyType", entry.getKey().getClass().getTypeName());
                             obj.putString("valueType", entry.getValue().getClass().getTypeName());
                         }
@@ -116,8 +117,7 @@ public class NBTHelper {
             }
 
             return obj;
-        }
-        else {
+        } else {
             return null;
         }
     }
@@ -135,15 +135,15 @@ public class NBTHelper {
 
     @SneakyThrows
     private static Object deserializeBasicType(NbtElement element, Class<?> targetType) {
-        if (targetType.isAssignableFrom(int.class)) {
+        if (targetType.isAssignableFrom(int.class) || targetType.isAssignableFrom(Integer.class)) {
             return ((NbtInt) element).intValue();
-        } else if (targetType.isAssignableFrom(short.class)) {
+        } else if (targetType.isAssignableFrom(short.class) || targetType.isAssignableFrom(Short.class)) {
             return ((NbtShort) element).shortValue();
-        } else if (targetType.isAssignableFrom(long.class)) {
+        } else if (targetType.isAssignableFrom(long.class) || targetType.isAssignableFrom(Long.class)) {
             return ((NbtLong) element).longValue();
-        } else if (targetType.isAssignableFrom(float.class)) {
+        } else if (targetType.isAssignableFrom(float.class) || targetType.isAssignableFrom(Float.class)) {
             return ((NbtFloat) element).floatValue();
-        } else if (targetType.isAssignableFrom(double.class)) {
+        } else if (targetType.isAssignableFrom(double.class) || targetType.isAssignableFrom(Double.class)) {
             return ((NbtDouble) element).doubleValue();
         } else if (targetType.isAssignableFrom(int[].class)) {
             return ((NbtIntArray) element).getIntArray();
@@ -160,12 +160,30 @@ public class NBTHelper {
             constructor.setAccessible(true);
             var result = (List) constructor.newInstance();
 
-            if(!typeName.equalsIgnoreCase("?")) {
+            if (!typeName.equalsIgnoreCase("?")) {
                 var list = (NbtList) comp.get("items");
                 for (var item : list) {
                     result.add(deserializeObject(item, Class.forName(typeName)));
                 }
             }
+            return result;
+        } else if (targetType.getSuperclass() == AbstractMap.class) {
+            var comp = (NbtCompound) element;
+            var keyTypeName = comp.getString("keyType");
+            var valueTypeName = comp.getString("valueType");
+            var constructor = targetType.getConstructor();
+            constructor.setAccessible(true);
+            var result = (AbstractMap) constructor.newInstance();
+
+            if (!keyTypeName.equalsIgnoreCase("?") && !valueTypeName.equalsIgnoreCase("?")) {
+                var list = (NbtList) comp.get("items");
+                for (var item : list) {
+                    var itemComp = (NbtCompound) item;
+                    result.put(deserializeObject(itemComp.get("key"), Class.forName(keyTypeName)),
+                            deserializeObject(itemComp.get("value"), Class.forName(valueTypeName)));
+                }
+            }
+
             return result;
         } else {
             return null;

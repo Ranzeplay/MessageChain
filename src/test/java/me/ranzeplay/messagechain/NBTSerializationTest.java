@@ -10,6 +10,7 @@ import net.minecraft.nbt.NbtCompound;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,7 +33,7 @@ public class NBTSerializationTest {
         @NBTSerializationEntry
         SubContent sub;
         @NBTSerializationEntry
-        Map<Integer, String> mapStore;
+        HashMap<Integer, String> mapStore;
     }
 
     @AllArgsConstructor
