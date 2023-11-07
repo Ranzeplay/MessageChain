@@ -89,8 +89,7 @@ public class NBTHelper {
             Map map = (Map) source;
             var obj = new NbtCompound();
             if (map.isEmpty()) {
-                obj.putString("keyType", "?");
-                obj.putString("valueType", "?");
+                obj.putString("type", "?");
             } else {
                 var it = map.entrySet().iterator();
                 var list = new NbtList();
@@ -104,9 +103,8 @@ public class NBTHelper {
                         itemComp.put("value", valueSerializationResult);
                         list.add(itemComp);
 
-                        if (!obj.contains("keyType") || !obj.contains("valueType")) {
-                            obj.putString("keyType", entry.getKey().getClass().getTypeName());
-                            obj.putString("valueType", entry.getValue().getClass().getTypeName());
+                        if (!obj.contains("type")) {
+                            obj.putString("type", String.format("%s : %s", entry.getKey().getClass().getTypeName(), entry.getValue().getClass().getTypeName()));
                         }
                     } else {
                         return obj;
@@ -169,8 +167,9 @@ public class NBTHelper {
             return result;
         } else if (targetType.getSuperclass() == AbstractMap.class) {
             var comp = (NbtCompound) element;
-            var keyTypeName = comp.getString("keyType");
-            var valueTypeName = comp.getString("valueType");
+            var kvType = comp.getString("type").split(" : ");
+            var keyTypeName = kvType[0];
+            var valueTypeName = kvType[1];
             var constructor = targetType.getConstructor();
             constructor.setAccessible(true);
             var result = (AbstractMap) constructor.newInstance();
