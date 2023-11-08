@@ -9,13 +9,11 @@ import net.minecraft.util.Identifier;
 
 public class MessageChain implements ModInitializer {
     public static Identifier COMM_IDENTIFIER = new Identifier("message_chain.networking", "comm");
-    public static Identifier DATA_SUBSCRIPTION_IDENTIFIER = new Identifier("message_chain.networking", "data_subscription");
 
     @Override
     public void onInitialize() {
         new RemoteRouteManager();
         new NotificationManager();
-        new DataSubscriptionManager();
 
         ExampleRouteTest.configureServerSide();
         ExampleNotificationTest.configureServerSide();
