@@ -3,7 +3,7 @@ package me.ranzeplay.messagechain.managers.routing;
 import lombok.SneakyThrows;
 import me.ranzeplay.messagechain.MessageChain;
 import me.ranzeplay.messagechain.models.AbstractNBTSerializable;
-import me.ranzeplay.messagechain.models.CommPacket;
+import me.ranzeplay.messagechain.models.routing.RoutingCommPacket;
 import me.ranzeplay.messagechain.models.routing.RouteFailResponse;
 import me.ranzeplay.messagechain.models.routing.RouteHandler;
 import me.ranzeplay.messagechain.models.routing.RouteRequestContext;
@@ -80,7 +80,7 @@ public class RemoteRouteManager {
             response = RouteResponse.success(executionResult, route.getSuccessClazz());
         }
 
-        var packet = new CommPacket<>(packetId, response);
+        var packet = new RoutingCommPacket<>(packetId, response);
         ServerPlayNetworking.send(playerSender, MessageChain.COMM_IDENTIFIER, packet.toPacketByteBuf());
     }
 }

@@ -3,6 +3,7 @@ package me.ranzeplay.messagechain.managers.routing;
 import lombok.SneakyThrows;
 import me.ranzeplay.messagechain.MessageChain;
 import me.ranzeplay.messagechain.models.*;
+import me.ranzeplay.messagechain.models.routing.RoutingCommPacket;
 import me.ranzeplay.messagechain.models.routing.RouteRequest;
 import me.ranzeplay.messagechain.models.routing.RouteRequestCache;
 import me.ranzeplay.messagechain.models.routing.RouteResponse;
@@ -52,7 +53,7 @@ public class LocalRequestManager {
 
         requestMap.put(id, new RouteRequestCache<>(id, reqParam, successClass));
 
-        var packet = new CommPacket<>(id, reqParam);
+        var packet = new RoutingCommPacket<>(id, reqParam);
         ClientPlayNetworking.send(MessageChain.COMM_IDENTIFIER, packet.toPacketByteBuf());
 
         // Wait for response

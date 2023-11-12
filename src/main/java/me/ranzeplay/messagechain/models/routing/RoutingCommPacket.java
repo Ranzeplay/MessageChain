@@ -1,8 +1,9 @@
-package me.ranzeplay.messagechain.models;
+package me.ranzeplay.messagechain.models.routing;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.SneakyThrows;
+import me.ranzeplay.messagechain.models.AbstractNBTSerializable;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.network.PacketByteBuf;
 
@@ -15,7 +16,7 @@ import java.util.UUID;
  */
 @AllArgsConstructor
 @Getter
-public class CommPacket<T extends AbstractNBTSerializable> {
+public class RoutingCommPacket<T extends AbstractNBTSerializable> {
     /**
      * Packet ID, used to uniquely identify packets, which is used to trace response from the server.
      */
@@ -29,7 +30,7 @@ public class CommPacket<T extends AbstractNBTSerializable> {
     }
 
     @SneakyThrows
-    public CommPacket(PacketByteBuf buf) {
+    public RoutingCommPacket(PacketByteBuf buf) {
         this.id = buf.readUuid();
 
         var superClass = (ParameterizedType) getClass().getGenericSuperclass();
