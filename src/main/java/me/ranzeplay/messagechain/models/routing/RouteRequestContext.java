@@ -2,6 +2,7 @@ package me.ranzeplay.messagechain.models.routing;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import me.ranzeplay.messagechain.models.AbstractNBTSerializable;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
@@ -12,7 +13,7 @@ import java.util.UUID;
 
 @AllArgsConstructor
 @Getter
-public class RouteRequestContext<TPayload> {
+public class RouteRequestContext<TPayload extends AbstractNBTSerializable> {
     UUID id;
     Identifier route;
     TPayload payload;

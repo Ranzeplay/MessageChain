@@ -22,7 +22,7 @@ import java.util.function.Consumer;
 public class LocalRequestManager {
     private static LocalRequestManager INSTANCE;
 
-    private final Map<UUID, RouteRequestCache<?, ?>> requestMap;
+    private final Map<UUID, RouteRequestCache<?, ?, ?>> requestMap;
 
     public LocalRequestManager() {
         requestMap = new HashMap<>();
@@ -36,15 +36,17 @@ public class LocalRequestManager {
 
     /**
      * Send a request to the server with custom data provided
-     * @param route Target route to server
-     * @param payload Payload that sends to server
+     *
+     * @param route        Target route to server
+     * @param payload      Payload that sends to server
      * @param successClass Returning data type when successfully processed data
-     * @param <TPayload> Payload type
-     * @param <TSuccess> Success type
+     * @param <TPayload>   Payload type
+     * @param <TSuccess>   Success type
      * @return Response data
      */
     @SneakyThrows
-    public <TPayload extends AbstractNBTSerializable, TSuccess extends AbstractNBTSerializable> RouteResponse<TSuccess> sendRequest(Identifier route, TPayload payload, Class<TSuccess> successClass) {
+    public <TPayload extends AbstractNBTSerializable, TSuccess extends AbstractNBTSerializable, TFail extends AbstractNBTSerializable>
+    RouteResponse<TSuccess, TFail> sendRequest(Identifier route, TPayload payload, Class<TSuccess> successClass, Class<TFail> failClass) {
         var id = UUID.randomUUID();
         var reqParam = new RouteRequest<>(route, payload);
 
@@ -62,21 +64,23 @@ public class LocalRequestManager {
         var response = requestMap.get(id);
         requestMap.remove(id);
 
-        return (RouteResponse<TSuccess>) response.getResponseData();
+        return (RouteResponse<TSuccess, TFail>) response.getResponseData();
     }
 
     /**
      * Send a request to the server with custom data provided using a new thread.
-     * @param route Target route to server.
-     * @param payload Payload that sends to server.
+     *
+     * @param route        Target route to server.
+     * @param payload      Payload that sends to server.
      * @param successClass Returning data type when successfully processed data.
-     * @param <TPayload> Payload type.
-     * @param <TSuccess> Success type.
-     * @param callback Actions when receiving response.
+     * @param <TPayload>   Payload type.
+     * @param <TSuccess>   Success type.
+     * @param callback     Actions when receiving response.
      */
-    public <TPayload extends AbstractNBTSerializable, TSuccess extends AbstractNBTSerializable> void sendThreadedRequest(Identifier route, TPayload payload, Class<TSuccess> successClass, Consumer<RouteResponse<TSuccess>> callback) {
+    public <TPayload extends AbstractNBTSerializable, TSuccess extends AbstractNBTSerializable, TFail extends AbstractNBTSerializable>
+    void sendThreadedRequest(Identifier route, TPayload payload, Class<TSuccess> successClass, Class<TFail> failClass, Consumer<RouteResponse<TSuccess, TFail>> callback) {
         new Thread(() -> {
-            var response = sendRequest(route, payload, successClass);
+            var response = sendRequest(route, payload, successClass, failClass);
             callback.accept(response);
         }).start();
     }
@@ -91,7 +95,7 @@ public class LocalRequestManager {
         var obj = requestMap.get(commPacketId);
 
         var nbt = Objects.requireNonNull(buf.readNbt());
-        var response = new RouteResponse(nbt, obj.getResponseClass());
+        var response = new RouteResponse(nbt, obj.getSuccessClass(), obj.getFailClass());
         obj.setResponseData(response);
 
         synchronized (obj) {

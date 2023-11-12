@@ -2,7 +2,9 @@ package me.ranzeplay.messagechain.managers.routing;
 
 import lombok.SneakyThrows;
 import me.ranzeplay.messagechain.MessageChain;
+import me.ranzeplay.messagechain.models.AbstractNBTSerializable;
 import me.ranzeplay.messagechain.models.CommPacket;
+import me.ranzeplay.messagechain.models.routing.RouteFailResponse;
 import me.ranzeplay.messagechain.models.routing.RouteHandler;
 import me.ranzeplay.messagechain.models.routing.RouteRequestContext;
 import me.ranzeplay.messagechain.models.routing.RouteResponse;
@@ -19,7 +21,7 @@ import java.util.HashMap;
 public class RemoteRouteManager {
     private static RemoteRouteManager INSTANCE;
 
-    HashMap<Identifier, RouteHandler<?, ?>> routeRegistry;
+    HashMap<Identifier, RouteHandler<?, ?, ?>> routeRegistry;
 
     public RemoteRouteManager() {
         INSTANCE = this;
@@ -36,7 +38,7 @@ public class RemoteRouteManager {
      *
      * @param handler The route handler to be registered.
      */
-    public void registerRoute(RouteHandler<?, ?> handler) {
+    public void registerRoute(RouteHandler<?, ?, ?> handler) {
         routeRegistry.put(handler.getRoute(), handler);
     }
 
@@ -60,18 +62,24 @@ public class RemoteRouteManager {
         var routeId = new Identifier(routeIdRaw[0], routeIdRaw[1]);
 
         var route = routeRegistry.get(routeId);
-        var payloadObjectSuper = route.getPayloadClazz()
-                .getConstructor()
-                .newInstance()
-                .loadFromNbt(param.getCompound("payload"));
-        var payloadObject = route.getPayloadClazz()
-                .cast(payloadObjectSuper);
 
-        var executionResult = route.getSuccessClazz().cast(route.getAction().apply(new RouteRequestContext<>(packetId, routeId, payloadObject, server, playerSender, networkHandler, packetSender)));
+        RouteResponse response;
+        if (route == null) {
+            response = RouteResponse.fail(new RouteFailResponse<>(RouteFailResponse.FailType.ROUTE_NOT_FOUND, null, AbstractNBTSerializable.class), AbstractNBTSerializable.class);
+        } else {
+            var payloadObjectSuper = route.getPayloadClazz()
+                    .getConstructor()
+                    .newInstance()
+                    .loadFromNbt(param.getCompound("payload"));
+            var payloadObject = route.getPayloadClazz()
+                    .cast(payloadObjectSuper);
 
-        var response = new RouteResponse<>(executionResult);
+            var executionResult = route.getSuccessClazz().cast(route.getAction().apply(new RouteRequestContext<>(packetId, routeId, payloadObject, server, playerSender, networkHandler, packetSender)));
+
+            response = RouteResponse.success(executionResult, route.getSuccessClazz());
+        }
+
         var packet = new CommPacket<>(packetId, response);
-
         ServerPlayNetworking.send(playerSender, MessageChain.COMM_IDENTIFIER, packet.toPacketByteBuf());
     }
 }

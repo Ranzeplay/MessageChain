@@ -1,9 +1,6 @@
 package me.ranzeplay.messagechain.models.routing;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.SneakyThrows;
+import lombok.*;
 import me.ranzeplay.messagechain.models.AbstractNBTSerializable;
 import net.minecraft.nbt.NbtCompound;
 import org.apache.commons.lang3.NotImplementedException;
@@ -13,12 +10,13 @@ import org.apache.commons.lang3.NotImplementedException;
  * @param <TSuccess> Actual data returning from the server, if it failed to process, it should be String containing a reason, and `success` set to `false`.
  */
 @NoArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Setter
 @Getter
-public class RouteResponse<TSuccess extends AbstractNBTSerializable> extends AbstractNBTSerializable {
+public class RouteResponse<TSuccess extends AbstractNBTSerializable, TFail extends AbstractNBTSerializable> extends AbstractNBTSerializable {
     boolean success;
     TSuccess successResponse;
-    String failedReason;
+    RouteFailResponse<TFail> failResponse;
 
     /**
      * Create the object with a successful response.
@@ -29,24 +27,30 @@ public class RouteResponse<TSuccess extends AbstractNBTSerializable> extends Abs
         this.successResponse = successResponse;
     }
 
-    /**
-     * Create the object with a failed response
-     * @param failedReason The reason of failing to process data.
-     */
-    public RouteResponse(String failedReason) {
-        this.success = false;
-        this.failedReason = failedReason;
+    public static <S extends AbstractNBTSerializable, F extends AbstractNBTSerializable> RouteResponse<S, F> success(S data, Class<F> failClass) {
+        return new RouteResponse<>(true, data, new RouteFailResponse<>());
     }
 
     @SneakyThrows
-    public RouteResponse(NbtCompound nbt, Class<TSuccess> successClass) {
+    public static <S extends AbstractNBTSerializable, F extends AbstractNBTSerializable> RouteResponse<S, F> fail(RouteFailResponse<F> data, Class<S> successClass) {
+        return new RouteResponse<>(false, successClass.getConstructor().newInstance(), data);
+    }
+
+    @SneakyThrows
+    public RouteResponse(NbtCompound nbt, Class<TSuccess> successClass, Class<TFail> failClass) {
         success = nbt.getBoolean("success");
         if(success) {
-            var successData = successClass.newInstance();
+            var successData = successClass.getConstructor().newInstance();
             successData.fromNbt(nbt.getCompound("payload"));
             successResponse = successData;
         } else {
-            failedReason = nbt.getString("reason");
+            var failData = failClass.getConstructor().newInstance();
+            failData.fromNbt(nbt.getCompound("payload"));
+
+            var response = RouteFailResponse.class.getConstructor().newInstance();
+            response.failClass = failClass;
+            response.fromNbt(nbt.getCompound("payload"));
+            failResponse = response;
         }
     }
 
@@ -57,7 +61,7 @@ public class RouteResponse<TSuccess extends AbstractNBTSerializable> extends Abs
         if(success) {
             nbt.put("payload", successResponse.toNbt());
         } else {
-            nbt.putString("reason", failedReason);
+            nbt.put("payload", failResponse.toNbt());
         }
 
         return nbt;

@@ -8,21 +8,22 @@ import me.ranzeplay.messagechain.models.AbstractNBTSerializable;
 import java.util.UUID;
 
 @Getter
-public class RouteRequestCache<TPayload extends AbstractNBTSerializable, TSuccess extends AbstractNBTSerializable> {
+public class RouteRequestCache<TPayload extends AbstractNBTSerializable, TSuccess extends AbstractNBTSerializable, TFail extends AbstractNBTSerializable> {
     Class<TPayload> payloadClass;
-    Class<TSuccess> responseClass;
+    Class<TSuccess> successClass;
+    Class<TFail> failClass;
 
     UUID id;
     RouteRequest<TPayload> requestData;
     @Setter
-    RouteResponse<TSuccess> responseData;
+    RouteResponse<TSuccess, TFail> responseData;
 
     @SneakyThrows
     public RouteRequestCache(UUID id, RouteRequest<TPayload> requestData, Class<TSuccess> responseClass) {
         this.id = id;
 
         payloadClass = (Class<TPayload>) requestData.getPayload().getClass();
-        this.responseClass = responseClass;
+        this.successClass = responseClass;
 
         this.requestData = requestData;
     }

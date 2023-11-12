@@ -12,9 +12,10 @@ import net.minecraft.util.Identifier;
  */
 @AllArgsConstructor
 @Getter
-public class RouteHandler<TPayload extends AbstractNBTSerializable, TSuccess extends AbstractNBTSerializable> {
+public class RouteHandler<TPayload extends AbstractNBTSerializable, TSuccess extends AbstractNBTSerializable, TFail extends AbstractNBTSerializable> {
     Class<TPayload> payloadClazz;
     Class<TSuccess> successClazz;
+    Class<TFail> failClazz;
     /**
      * The route of the handler. Just like a URL.
      */
