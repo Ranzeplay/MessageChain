@@ -3,6 +3,7 @@ package me.ranzeplay.messagechain.managers.notification;
 import lombok.SneakyThrows;
 import me.ranzeplay.messagechain.models.AbstractNBTSerializable;
 import me.ranzeplay.messagechain.models.notification.AbstractNotificationHandler;
+import me.ranzeplay.messagechain.models.notification.NotificationHandlerWrapper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
@@ -25,7 +26,7 @@ public class NotificationManager {
 
     private static final Identifier NOTIFICATION_IDENTIFIER = new Identifier("message_chain.networking", "notification");
 
-    private final Map<Identifier, AbstractNotificationHandler> notificationHandlers;
+    private final Map<Identifier, NotificationHandlerWrapper> notificationHandlers;
 
     public NotificationManager() {
         INSTANCE = this;
@@ -41,13 +42,17 @@ public class NotificationManager {
         var identifier = buf.readIdentifier();
         var handler = notificationHandlers.get(identifier);
         if (handler != null) {
-            var payloadObject = ((AbstractNBTSerializable) handler.getPayloadClazz()
+            var payloadObject = ((AbstractNBTSerializable) handler.getHandler().getPayloadClazz()
                     .getConstructor()
                     .newInstance())
                     .loadFromNbt(buf.readNbt());
-            var payload = handler.getPayloadClazz().cast(payloadObject);
+            var payload = handler.getHandler().getPayloadClazz().cast(payloadObject);
 
-            handler.accept(payload);
+            handler.getHandler().accept(payload);
+
+            if(handler.isSubscribeOnce()) {
+                notificationHandlers.remove(identifier);
+            }
         }
     }
 
@@ -55,8 +60,8 @@ public class NotificationManager {
         ServerPlayNetworking.send(target, NOTIFICATION_IDENTIFIER, PacketByteBufs.create().writeIdentifier(identifier).writeNbt(payload.toNbt()));
     }
 
-    public void registerHandler(Identifier identifier, AbstractNotificationHandler<? extends AbstractNBTSerializable> handler) {
-        notificationHandlers.put(identifier, handler);
+    public void registerHandler(Identifier identifier, AbstractNotificationHandler<? extends AbstractNBTSerializable> handler, boolean once) {
+        notificationHandlers.put(identifier, new NotificationHandlerWrapper<>(handler, once));
     }
 
     public void unregisterHandler(Identifier identifier) {
