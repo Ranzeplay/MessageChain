@@ -23,7 +23,7 @@ public class ExampleNotificationTest extends AbstractNotificationHandler<Example
     }
 
     public static void configureClientSide() {
-        NotificationManager.getInstance().registerHandler(NOTIFICATION_IDENTIFIER, new ExampleNotificationTest());
+        NotificationManager.getInstance().registerHandler(NOTIFICATION_IDENTIFIER, new ExampleNotificationTest(), true);
     }
 
     public ExampleNotificationTest() {
