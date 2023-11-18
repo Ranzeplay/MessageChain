@@ -122,3 +122,11 @@ A `RouteResponse` is required to be returned, containing the execution result. W
 ### Client-side callback method (only when invoked `sendThreadedRequest`)
 
 Like what title said.
+
+### Remove an existing route
+
+To remove an existing route, use the following method:
+
+```java
+RemoteRouteManager.getInstance().unregisterRoute(Identifier);
+```
