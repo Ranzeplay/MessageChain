@@ -11,6 +11,7 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 
@@ -50,7 +51,7 @@ public class NotificationManager {
 
             handler.getHandler().accept(payload);
 
-            if(handler.isSubscribeOnce()) {
+            if (handler.isSubscribeOnce()) {
                 notificationHandlers.remove(identifier);
             }
         }
@@ -58,6 +59,13 @@ public class NotificationManager {
 
     public <T extends AbstractNBTSerializable> void sendNotification(Identifier identifier, T payload, ServerPlayerEntity target) {
         ServerPlayNetworking.send(target, NOTIFICATION_IDENTIFIER, PacketByteBufs.create().writeIdentifier(identifier).writeNbt(payload.toNbt()));
+    }
+
+    @SuppressWarnings("unused")
+    public <T extends AbstractNBTSerializable> void broadcastNotification(MinecraftServer server, Identifier identifier, T payload) {
+        for (var player : server.getPlayerManager().getPlayerList()) {
+            ServerPlayNetworking.send(player, NOTIFICATION_IDENTIFIER, PacketByteBufs.create().writeIdentifier(identifier).writeNbt(payload.toNbt()));
+        }
     }
 
     public void registerHandler(Identifier identifier, AbstractNotificationHandler<? extends AbstractNBTSerializable> handler, boolean once) {
