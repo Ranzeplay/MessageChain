@@ -90,6 +90,10 @@ const config: Config = {
               label: 'GitHub issues',
               href: 'https://github.com/Ranzeplay/MessageChain/issues',
             },
+            {
+              label: 'GitHub discussions',
+              href: 'https://github.com/Ranzeplay/MessageChain/discussions',
+            },
           ],
         },
         {
