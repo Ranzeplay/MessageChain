@@ -1,0 +1,124 @@
+---
+sidebar_position: 1
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Routing
+
+This is a core feature oF MessageChain that allows you to request a server-side registered route and get a result from server.
+
+<details>
+<summary>What will you have to do without Routing</summary>
+
+Without using Routing, you would have to code like this
+
+<Tabs>
+<TabItem value="client-side" label="Client side">
+
+[Click here to see the full file](https://github.com/Ranzeplay/hNation/blob/4f6c028400ac5e1ca7c9a49fd4a7cecd51038531/src/main/java/me/ranzeplay/hnation/features/communication/announcement/client/AnnouncementClientNetworking.java)
+
+```java title="ClientAnnouncementNetworking.java"
+private static void pullLatestAnnouncements() {
+    var packet = PacketByteBufs.create();
+    packet.writeShort(5);
+    ClientPlayNetworking.send(AnnouncementIdentifier.PULL_ANNOUNCEMENT_REQUEST, packet);
+}
+
+private static void receiveLatestAnnouncements(MinecraftClient client, PacketByteBuf packetByteBuf) {
+    assert client.player != null;
+    var data = Objects.requireNonNull(packetByteBuf.readNbt());
+    var dataList = data.getList("announcements", NbtElement.COMPOUND_TYPE);
+    client.player.sendMessage(Text.literal(String.format("Displaying latest %d announcement(s)", dataList.size())));
+    for (int i = 0; i < dataList.size(); i++) {
+        var entry = dataList.getCompound(i);
+        var announcement = new AnnouncementViewModel(entry);
+        client.player.sendMessage(Text.literal(announcement.toString()));
+    }
+}
+```
+</TabItem>
+<TabItem value="server-side" label="Server side">
+
+[Click here to see the full file](https://github.com/Ranzeplay/hNation/blob/4f6c028400ac5e1ca7c9a49fd4a7cecd51038531/src/main/java/me/ranzeplay/hnation/features/communication/announcement/server/ServerAnnouncementNetworking.java#L21)
+
+```java title="ServerAnnouncementNetworking.java"
+private static void pushAnnouncements(ServerPlayerEntity sender, PacketByteBuf packetByteBuf) {
+    var count = packetByteBuf.readShort();
+    var result = new NbtList();
+    var dbItems = AnnouncementManager.getInstance().getLatest(count);
+
+    dbItems.stream()
+            .map(AnnouncementViewModel::new)
+            .forEach(a -> result.add(a.toNbt()));
+
+    var nbt = new NbtCompound();
+    nbt.put("announcements", result);
+    ServerPlayNetworking.send(sender, AnnouncementIdentifier.PULL_ANNOUNCEMENT_REPLY, PacketByteBufs.create().writeNbt(nbt));
+}
+```
+</TabItem>
+</Tabs>
+
+This is so ugly because you have to use at least TWO methods to achieve one function, getting a list of announcements from server.
+
+</details>
+
+## Process
+
+In short, refer to this [link](https://github.com/Ranzeplay/MessageChain/tree/v0.2/src/main/java/me/ranzeplay/messagechain/testing) to view the example source code.
+
+### Server-side route registration
+
+MessageChain will setup a `RemoteRouteManager` on initialization. To register your route, use the following code to do that.
+
+```java
+RemoteRouteManager.getInstance().registerRoute(routeHandler);
+```
+
+Parameter `routeHandler` is a `me.ranzeplay.messagechain.models.routing.RouteHandler` instance, which consists of the type of payload,
+the type of data returned when successfully processed the request, data type returned when failed to process it, the path of the route,
+and also the actions to process the request. Constructor as follows:
+
+```java
+new RouteHandler<>(Class<TPayload>, Class<TSuccess>, Class<TFail>, Identifier, AbstractRouteExecutor);
+```
+
+- `Identifier` is a Minecraft identifier.
+- `AbstractRouteExecutor` is basically a `Function<T, R>` interface.
+
+### Client-side route invocation
+
+Once you have registered a `RouteHandler` on server-side, you can call it from client-side.
+There are 2 methods to invoke, one blocks the execution, and the other creates another thread to invoke, but a callback `Consumer<T>` is required.
+
+If you send a request in a single player world to the internal server using the blocking method, the whole client will freeze.
+So if it's available to use the other one, use the another one.
+
+Just like mentioned above, MessageChain has set up a `LocalRequestManager` on initialization.
+
+The blocking way:
+
+```java
+LocalRequestManager.getInstance().sendRequest(Identifier, TPayload, Class<TPayload>, Class<TFail>);
+```
+
+The non-blocking way:
+
+```java
+LocalRequestManager.getInstance().sendThreadedRequest(Identifier, TPayload, Class<TPayload>, Class<TFail>, Consumer<RouteResponse<TSuccess, TFail>>);
+```
+
+### Server-side route handling
+
+Once the request has been sent to server, MessageChain will check if the Route does exist. If not, a `RouteFailResponse` with reason `FailType.ROUTE_NOT_FOUND` will be sent back.
+Otherwise, your code will kick in.
+
+Your code will be invoked with a `RouteRequestContext` containing request data, Minecraft server instance, sender information, and other uncommon information for you to use.
+
+A `RouteResponse` is required to be returned, containing the execution result. Whether the operation succeed or not, why, and other data.
+
+### Client-side callback method (only when invoked `sendThreadedRequest`)
+
+Like what title said.
