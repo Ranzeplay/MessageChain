@@ -1,0 +1,54 @@
+---
+sidebar_position: 2
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Setup
+
+> Be aware that MessageChain only supports Fabric at the moment.
+
+## Adding to your project as a dependency
+
+We recommend you to add the project as a dependency but not importing the whole JAR file.
+
+For your gradle project, there are some files that you should modify.
+
+<Tabs>
+
+<TabItem value="build.gradle" label="build.gradle">
+
+The packages are stored on Modrinth, so you should add the Modrinth maven repository.
+
+```gradle
+maven {
+    name = "Modrinth"
+    url = "https://api.modrinth.com/maven"
+}
+
+...
+
+dependencies {
+    // MessageChain
+    modImplementation "maven.modrinth:messagechain:${project.messagechain_version}"
+    modLocalRuntime "maven.modrinth:messagechain:${project.messagechain_version}"
+}
+```
+
+</TabItem>
+
+<TabItem value="gradle.properties" label="gradle.properties">
+
+
+As the latest version of MessageChain is v0.2-beta, you should add the following code.
+
+```gradle
+messagechain_version = 0.2
+```
+
+</TabItem>
+
+</Tabs>
+
+Then the project will be added.
