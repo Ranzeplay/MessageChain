@@ -17,6 +17,7 @@ const config: Config = {
   // If you aren't using GitHub pages, you don't need these.
   organizationName: 'Ranzeplay', // Usually your GitHub org/user name.
   projectName: 'MessageChain', // Usually your repo name.
+  trailingSlash: false,
 
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
@@ -78,7 +79,7 @@ const config: Config = {
           items: [
             {
               label: 'Usage',
-              to: '/docs/intro',
+              to: '/docs/setup',
             },
           ],
         },
