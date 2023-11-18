@@ -72,6 +72,7 @@ public class NotificationManager {
         notificationHandlers.put(identifier, new NotificationHandlerWrapper<>(handler, once));
     }
 
+    @SuppressWarnings("unused")
     public void unregisterHandler(Identifier identifier) {
         notificationHandlers.remove(identifier);
     }

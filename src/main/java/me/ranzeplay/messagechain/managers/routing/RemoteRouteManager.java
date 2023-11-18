@@ -1,13 +1,8 @@
 package me.ranzeplay.messagechain.managers.routing;
 
-import lombok.SneakyThrows;
 import me.ranzeplay.messagechain.MessageChain;
 import me.ranzeplay.messagechain.models.AbstractNBTSerializable;
-import me.ranzeplay.messagechain.models.routing.RoutingCommPacket;
-import me.ranzeplay.messagechain.models.routing.RouteFailResponse;
-import me.ranzeplay.messagechain.models.routing.RouteHandler;
-import me.ranzeplay.messagechain.models.routing.RouteRequestContext;
-import me.ranzeplay.messagechain.models.routing.RouteResponse;
+import me.ranzeplay.messagechain.models.routing.*;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.PacketByteBuf;
@@ -53,7 +48,7 @@ public class RemoteRouteManager {
         ServerPlayNetworking.registerGlobalReceiver(MessageChain.COMM_IDENTIFIER, this::handleNetworking);
     }
 
-    @SneakyThrows
+    // @SneakyThrows
     private void handleNetworking(MinecraftServer server, ServerPlayerEntity playerSender, ServerPlayNetworkHandler networkHandler, PacketByteBuf buf, PacketSender packetSender) {
         var packetId = buf.readUuid();
         var param = buf.readNbt();
@@ -67,15 +62,20 @@ public class RemoteRouteManager {
         if (route == null) {
             response = RouteResponse.fail(new RouteFailResponse<>(RouteFailResponse.FailType.ROUTE_NOT_FOUND, null, AbstractNBTSerializable.class), AbstractNBTSerializable.class);
         } else {
-            var payloadObjectSuper = route.getPayloadClazz()
-                    .getConstructor()
-                    .newInstance()
-                    .loadFromNbt(param.getCompound("payload"));
-            var payloadObject = route.getPayloadClazz()
-                    .cast(payloadObjectSuper);
+            AbstractNBTSerializable payloadObjectSuper;
+            try {
+                payloadObjectSuper = route.getPayloadClazz()
+                        .getConstructor()
+                        .newInstance()
+                        .loadFromNbt(param.getCompound("payload"));
+                var payloadObject = route.getPayloadClazz()
+                        .cast(payloadObjectSuper);
 
-            var context = new RouteRequestContext<>(packetId, routeId, payloadObject, server, playerSender, networkHandler, packetSender);
-            response = (RouteResponse) route.getAction().apply(context);
+                var context = new RouteRequestContext<>(packetId, routeId, payloadObject, server, playerSender, networkHandler, packetSender);
+                response = (RouteResponse) route.getAction().apply(context);
+            } catch (Exception e) {
+                response = RouteResponse.fail(new RouteFailResponse<>(RouteFailResponse.FailType.INTERNAL_ERROR, null, AbstractNBTSerializable.class), AbstractNBTSerializable.class);
+            }
         }
 
         var packet = new RoutingCommPacket<>(packetId, response);

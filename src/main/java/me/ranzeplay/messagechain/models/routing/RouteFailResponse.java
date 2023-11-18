@@ -36,6 +36,7 @@ public class RouteFailResponse<T extends AbstractNBTSerializable> extends Abstra
 
     public enum FailType {
         ROUTE_NOT_FOUND,
-        FAILED_TO_PROCESS
+        FAILED_TO_PROCESS,
+        INTERNAL_ERROR,
     }
 }
