@@ -75,9 +75,7 @@ public class RemoteRouteManager {
                     .cast(payloadObjectSuper);
 
             var context = new RouteRequestContext<>(packetId, routeId, payloadObject, server, playerSender, networkHandler, packetSender);
-            var executionResult = route.getSuccessClazz().cast(route.getAction().apply(context));
-
-            response = RouteResponse.success(executionResult, route.getSuccessClazz());
+            response = (RouteResponse) route.getAction().apply(context);
         }
 
         var packet = new RoutingCommPacket<>(packetId, response);

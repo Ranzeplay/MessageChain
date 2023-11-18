@@ -19,11 +19,12 @@ public class RouteRequestCache<TPayload extends AbstractNBTSerializable, TSucces
     RouteResponse<TSuccess, TFail> responseData;
 
     @SneakyThrows
-    public RouteRequestCache(UUID id, RouteRequest<TPayload> requestData, Class<TSuccess> responseClass) {
+    public RouteRequestCache(UUID id, RouteRequest<TPayload> requestData, Class<TSuccess> responseClass, Class<TFail> failClass) {
         this.id = id;
 
         payloadClass = (Class<TPayload>) requestData.getPayload().getClass();
         this.successClass = responseClass;
+        this.failClass = failClass;
 
         this.requestData = requestData;
     }

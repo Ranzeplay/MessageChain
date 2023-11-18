@@ -16,7 +16,7 @@ public class ExampleNotificationTest extends AbstractNotificationHandler<Example
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, registrationEnvironment)
                 -> dispatcher.register(CommandManager.literal("msgc_test_notification")
                 .executes(context -> {
-                    NotificationManager.getInstance().sendNotification(NOTIFICATION_IDENTIFIER, new ExampleData("Message pushed by notification"), context.getSource().getPlayer());
+                    NotificationManager.getInstance().sendNotification(NOTIFICATION_IDENTIFIER, new ExampleData("Message pushed by notification", false), context.getSource().getPlayer());
                     return Command.SINGLE_SUCCESS;
                 })
         ));

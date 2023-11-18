@@ -4,7 +4,6 @@ import lombok.SneakyThrows;
 import net.minecraft.nbt.*;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -49,7 +48,6 @@ public class NBTHelper {
         return serializeObject(source.get(o));
     }
 
-    // TODO: Implement serialization for Map<K, V>
     private static NbtElement serializeBasicType(Object source) {
         var typeClass = source.getClass();
         if (typeClass.isAssignableFrom(Integer.class)) {
@@ -68,6 +66,8 @@ public class NBTHelper {
             return new NbtByteArray((byte[]) source);
         } else if (typeClass.isAssignableFrom(long[].class)) {
             return new NbtLongArray((long[]) source);
+        } else if (typeClass.isAssignableFrom(Boolean.class)) {
+            return NbtByte.of((boolean) source);
         } else if (typeClass.isAssignableFrom(String.class)) {
             return NbtString.of(String.valueOf(source));
         } else if (typeClass.getSuperclass() == AbstractList.class) {
@@ -149,6 +149,8 @@ public class NBTHelper {
             return ((NbtByteArray) element).getByteArray();
         } else if (targetType.isAssignableFrom(long[].class)) {
             return ((NbtLongArray) element).getLongArray();
+        } else if (targetType.isAssignableFrom(boolean.class) || targetType.isAssignableFrom(Boolean.class)) {
+            return ((NbtByte) element).byteValue() != 0;
         } else if (targetType.isAssignableFrom(String.class)) {
             return element.asString();
         } else if (targetType.getSuperclass() == AbstractList.class) {

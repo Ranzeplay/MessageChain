@@ -45,11 +45,11 @@ public class RouteResponse<TSuccess extends AbstractNBTSerializable, TFail exten
             successResponse = successData;
         } else {
             var failData = failClass.getConstructor().newInstance();
-            failData.fromNbt(nbt.getCompound("payload"));
+            failData.fromNbt(nbt.getCompound("payload").getCompound("data"));
 
             var response = RouteFailResponse.class.getConstructor().newInstance();
             response.failClass = failClass;
-            response.fromNbt(nbt.getCompound("payload"));
+            response.data = failData;
             failResponse = response;
         }
     }

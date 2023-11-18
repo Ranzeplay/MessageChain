@@ -38,7 +38,7 @@ public class RouteRequest<TPayload extends AbstractNBTSerializable> extends Abst
 
         var superClass = (ParameterizedType) getClass().getGenericSuperclass();
         var clazz = (Class<TPayload>) superClass.getActualTypeArguments()[0];
-        var payload = clazz.newInstance();
+        var payload = clazz.getConstructor().newInstance();
         payload.fromNbt(nbt.getCompound("payload"));
         this.payload = payload;
     }

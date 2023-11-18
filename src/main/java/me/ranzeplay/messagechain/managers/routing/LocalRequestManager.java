@@ -51,7 +51,7 @@ public class LocalRequestManager {
         var id = UUID.randomUUID();
         var reqParam = new RouteRequest<>(route, payload);
 
-        requestMap.put(id, new RouteRequestCache<>(id, reqParam, successClass));
+        requestMap.put(id, new RouteRequestCache<>(id, reqParam, successClass, failClass));
 
         var packet = new RoutingCommPacket<>(id, reqParam);
         ClientPlayNetworking.send(MessageChain.COMM_IDENTIFIER, packet.toPacketByteBuf());

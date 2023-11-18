@@ -2,25 +2,33 @@ package me.ranzeplay.messagechain.testing;
 
 import lombok.*;
 import me.ranzeplay.messagechain.models.AbstractNBTSerializable;
+import me.ranzeplay.messagechain.nbtutils.NBTHelper;
+import me.ranzeplay.messagechain.nbtutils.NBTSerializable;
+import me.ranzeplay.messagechain.nbtutils.NBTSerializationEntry;
 import net.minecraft.nbt.NbtCompound;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class ExampleData extends AbstractNBTSerializable {
+@NBTSerializable
+public class ExampleData extends AbstractNBTSerializable implements Cloneable {
+    @NBTSerializationEntry
     private String message;
+    @NBTSerializationEntry
+    private boolean issueError;
 
+    @SneakyThrows
     @Override
     public NbtCompound toNbt() {
-        var nbt = new NbtCompound();
-        nbt.putString("message", message);
-        return nbt;
+        return NBTHelper.serialize(this.clone());
     }
 
     @Override
     public void fromNbt(NbtCompound nbt) {
-        this.message = nbt.getString("message");
+        var result = NBTHelper.deserialize(nbt, ExampleData.class);
+        this.message = result.message;
+        this.issueError = result.issueError;
     }
 
     @Override

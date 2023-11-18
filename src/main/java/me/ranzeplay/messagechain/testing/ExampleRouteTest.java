@@ -3,10 +3,7 @@ package me.ranzeplay.messagechain.testing;
 import com.mojang.brigadier.Command;
 import me.ranzeplay.messagechain.managers.routing.LocalRequestManager;
 import me.ranzeplay.messagechain.managers.routing.RemoteRouteManager;
-import me.ranzeplay.messagechain.models.routing.AbstractRouteExecutor;
-import me.ranzeplay.messagechain.models.routing.RouteHandler;
-import me.ranzeplay.messagechain.models.routing.RouteRequestContext;
-import me.ranzeplay.messagechain.models.routing.RouteResponse;
+import me.ranzeplay.messagechain.models.routing.*;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.minecraft.client.MinecraftClient;
@@ -30,9 +27,13 @@ public class ExampleRouteTest extends AbstractRouteExecutor<ExampleData, Example
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess)
                 -> dispatcher.register(ClientCommandManager.literal("msgc_test_routing")
                 .executes(context -> {
-                    LocalRequestManager.getInstance().sendThreadedRequest(ROUTE_IDENTIFIER, new ExampleData("hello"), ExampleData.class, ExampleData.class,
+                    LocalRequestManager.getInstance().sendThreadedRequest(ROUTE_IDENTIFIER, new ExampleData("expected to fail", false), ExampleData.class, ExampleData.class,
                             response -> Objects.requireNonNull(MinecraftClient.getInstance().player)
                                     .sendMessage(Text.literal(response.getSuccessResponse().getMessage()))
+                    );
+                    LocalRequestManager.getInstance().sendThreadedRequest(ROUTE_IDENTIFIER, new ExampleData("expected to success", true), ExampleData.class, ExampleData.class,
+                            response -> Objects.requireNonNull(MinecraftClient.getInstance().player)
+                                    .sendMessage(Text.literal(response.getFailResponse().getData().getMessage()))
                     );
                     return Command.SINGLE_SUCCESS;
                 })
@@ -42,7 +43,12 @@ public class ExampleRouteTest extends AbstractRouteExecutor<ExampleData, Example
     @Override
     public RouteResponse<ExampleData, ExampleData> apply(RouteRequestContext<ExampleData> context) {
         var exampleData = context.getPayload();
-        exampleData.setMessage(String.format("Testing routing: %s", exampleData.getMessage()));
-        return new RouteResponse<>(exampleData);
+        if(exampleData.isIssueError()) {
+            exampleData.setMessage(String.format("Testing failing routing: %s", exampleData.getMessage()));
+            return RouteResponse.fail(new RouteFailResponse<>(RouteFailResponse.FailType.FAILED_TO_PROCESS, exampleData, ExampleData.class), ExampleData.class);
+        } else {
+            exampleData.setMessage(String.format("Testing success routing: %s", exampleData.getMessage()));
+            return RouteResponse.success(exampleData, ExampleData.class);
+        }
     }
 }
