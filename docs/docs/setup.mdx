@@ -21,7 +21,7 @@ For your gradle project, there are some files that you should modify.
 
 The packages are stored on Modrinth, so you should add the Modrinth maven repository.
 
-```gradle
+```gradle title="build.gradle"
 maven {
     name = "Modrinth"
     url = "https://api.modrinth.com/maven"
@@ -43,7 +43,7 @@ dependencies {
 
 As the latest version of MessageChain is v0.2-beta, you should add the following code.
 
-```gradle
+```properties title="gradle.properties"
 messagechain_version = 0.2
 ```
 
