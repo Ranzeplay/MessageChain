@@ -13,7 +13,7 @@ Since v0.1-beta
 
 :::
 
-This is a core feature oF MessageChain that allows you to request a server-side registered route and get a result from server.
+This is a core feature of MessageChain that allows you to request a server-side registered route and get a result from the server.
 
 <details>
 <summary>What will you have to do without Routing</summary>
@@ -67,7 +67,7 @@ private static void pushAnnouncements(ServerPlayerEntity sender, PacketByteBuf p
 </TabItem>
 </Tabs>
 
-This is so ugly because you have to use at least TWO methods to achieve one function, getting a list of announcements from server.
+This is so ugly because you have to use at least TWO methods to achieve one function, getting a list of announcements from the server.
 
 </details>
 
@@ -77,14 +77,14 @@ In short, refer to this [link](https://github.com/Ranzeplay/MessageChain/tree/v0
 
 ### Server-side route registration
 
-MessageChain will setup a `RemoteRouteManager` on initialization. To register your route, use the following code to do that.
+MessageChain will set up a `RemoteRouteManager` on initialization. To register your route, use the following code to do that.
 
 ```java
 RemoteRouteManager.getInstance().registerRoute(routeHandler);
 ```
 
 Parameter `routeHandler` is a `me.ranzeplay.messagechain.models.routing.RouteHandler` instance, which consists of the type of payload,
-the type of data returned when successfully processed the request, data type returned when failed to process it, the path of the route,
+the type of data returned when successfully processed the request, the type of data returned when failed to process the request and the path of the route,
 and also the actions to process the request. Constructor as follows:
 
 ```java
@@ -92,15 +92,15 @@ new RouteHandler<>(Class<TPayload>, Class<TSuccess>, Class<TFail>, Identifier, A
 ```
 
 - `Identifier` is a Minecraft identifier.
-- `AbstractRouteExecutor` is basically a `Function<T, R>` interface.
+- `AbstractRouteExecutor` is a `Function<T, R>` interface.
 
 ### Client-side route invocation
 
-Once you have registered a `RouteHandler` on server-side, you can call it from client-side.
+Once you have registered a `RouteHandler` on server side, you can call it from client side.
 There are 2 methods to invoke, one blocks the execution, and the other creates another thread to invoke, but a callback `Consumer<T>` is required.
 
-If you send a request in a single player world to the internal server using the blocking method, the whole client will freeze.
-So if it's available to use the other one, use the another one.
+If you send a request in a single-player world to the internal server using the blocking method, the whole client will freeze.
+So if it's possible to use the other one, use the other one.
 
 Just like mentioned above, MessageChain has set up a `LocalRequestManager` on initialization.
 
@@ -118,16 +118,16 @@ LocalRequestManager.getInstance().sendThreadedRequest(Identifier, TPayload, Clas
 
 ### Server-side route handling
 
-Once the request has been sent to server, MessageChain will check if the Route does exist. If not, a `RouteFailResponse` with reason `FailType.ROUTE_NOT_FOUND` will be sent back.
+Once the request has been sent to server, MessageChain will check if the Route does exist. If not, a `RouteFailResponse` with the reason `FailType.ROUTE_NOT_FOUND` will be sent back.
 Otherwise, your code will kick in.
 
 Your code will be invoked with a `RouteRequestContext` containing request data, Minecraft server instance, sender information, and other uncommon information for you to use.
 
-A `RouteResponse` is required to be returned, containing the execution result. Whether the operation succeed or not, why, and other data.
+A `RouteResponse` is required to be returned, containing the execution result. Whether the operation succeeds or not, why, and other data.
 
 ### Client-side callback method (only when invoked `sendThreadedRequest`)
 
-Like what title said.
+Like what the title said.
 
 ### Remove an existing route
 
