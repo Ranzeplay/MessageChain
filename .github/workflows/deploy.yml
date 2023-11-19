@@ -9,6 +9,8 @@ jobs:
   deploy:
     name: Deploy to Fly.io
     runs-on: ubuntu-latest
+    environment:
+      name: fly.io
     defaults:
       run:
         working-directory: docs

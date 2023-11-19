@@ -15,20 +15,20 @@ Unavailable in version v0.2-beta
 In package `me.ranzeplay.messagechain.nbtutils`
 
 Personally speaking, it often drives me crazy to code the conversion between NbtCompound and Object.
-It is basically hard-coding. So I made a small helper to do the favor.
+It is hardcoded. So I made a small helper to do the favor.
 
 ### Annotations
 
 #### `@NBTSerializable`
 
-Every class which needs to serialize and deserialize to and from NbtCompound should have the annotation,
+Every class that needs to serialize and deserialize to and from NbtCompound should have the annotation,
 which indicates that the object is able to do the conversion.
 Often, you'll extend `AbstractNBTSerializable` as well, because you are using MessageChain :)
 
 #### `@NBTSerializationEntry(key)`
 
-Every field which needs to take part in the conversion should have the annotation.
-It tells the NBTHelper that it need to process the field.
+Every field that needs to take part in the conversion should have the annotation.
+It tells the NBTHelper that it needs to process the field.
 
 ##### Parameter
 
@@ -48,7 +48,7 @@ Deserializes a `NbtCompound` to target `Object`.
 ### Base types
 
 The following types are served as base types,
-which you can directly annotate them with `@NBTSerializationEntry` without writing special serialization methods.
+which you can directly annotate with `@NBTSerializationEntry` without writing special serialization methods.
 
 - `int`, `Integer`
 - `short`, `Short`
@@ -60,12 +60,12 @@ which you can directly annotate them with `@NBTSerializationEntry` without writi
 - `long[]`
 - `boolean`, `Boolean`
 - `String`
-- `AbstractList` as super class(like ArrayList)
-- `AbstractMap` as super class(like HashMap)
+- `AbstractList` as the superclass(like ArrayList)
+- `AbstractMap` as the superclass(like HashMap)
 
 :::warning
 
-Exceptions will be thrown if annotated an abstract class field as the converter will create an instance of class while processing.
+Exceptions will be thrown if a field whose type is an abstract class is annotated as the converter will create an instance of class while processing.
 
 :::
 
