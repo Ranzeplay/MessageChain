@@ -60,7 +60,7 @@ public class RemoteRouteManager {
 
         RouteResponse response;
         if (route == null) {
-            response = RouteResponse.fail(new RouteFailResponse<>(RouteFailResponse.FailType.ROUTE_NOT_FOUND, null, AbstractNBTSerializable.class), AbstractNBTSerializable.class);
+            response = RouteResponse.fail(RouteFailResponse.notFound(AbstractNBTSerializable.class), AbstractNBTSerializable.class);
         } else {
             AbstractNBTSerializable payloadObjectSuper;
             try {
@@ -74,7 +74,7 @@ public class RemoteRouteManager {
                 var context = new RouteRequestContext<>(packetId, routeId, payloadObject, server, playerSender, networkHandler, packetSender);
                 response = (RouteResponse) route.getAction().apply(context);
             } catch (Exception e) {
-                response = RouteResponse.fail(new RouteFailResponse<>(RouteFailResponse.FailType.INTERNAL_ERROR, null, AbstractNBTSerializable.class), AbstractNBTSerializable.class);
+                response = RouteResponse.fail(RouteFailResponse.internalError(AbstractNBTSerializable.class), AbstractNBTSerializable.class);
             }
         }
 

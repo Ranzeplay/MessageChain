@@ -36,7 +36,24 @@ public class RouteFailResponse<T extends AbstractNBTSerializable> extends Abstra
 
     public enum FailType {
         ROUTE_NOT_FOUND,
+        ROUTE_TIME_OUT,
         FAILED_TO_PROCESS,
         INTERNAL_ERROR,
+    }
+
+    public static <TFail extends AbstractNBTSerializable> RouteFailResponse<TFail> notFound(Class<TFail> failClass) {
+        return new RouteFailResponse<>(FailType.ROUTE_NOT_FOUND, null, failClass);
+    }
+
+    public static <TFail extends AbstractNBTSerializable> RouteFailResponse<TFail> timedOut(Class<TFail> failClass) {
+        return new RouteFailResponse<>(FailType.ROUTE_TIME_OUT, null, failClass);
+    }
+
+    public static <TFail extends AbstractNBTSerializable> RouteFailResponse<TFail> internalError(Class<TFail> failClass) {
+        return new RouteFailResponse<>(FailType.INTERNAL_ERROR, null, failClass);
+    }
+
+    public static <TFail extends AbstractNBTSerializable> RouteFailResponse<TFail> failedToProcess(Class<TFail> failClass) {
+        return new RouteFailResponse<>(FailType.INTERNAL_ERROR, null, failClass);
     }
 }

@@ -3,10 +3,8 @@ package me.ranzeplay.messagechain.managers.routing;
 import lombok.SneakyThrows;
 import me.ranzeplay.messagechain.MessageChain;
 import me.ranzeplay.messagechain.models.*;
-import me.ranzeplay.messagechain.models.routing.RoutingCommPacket;
-import me.ranzeplay.messagechain.models.routing.RouteRequest;
-import me.ranzeplay.messagechain.models.routing.RouteRequestCache;
-import me.ranzeplay.messagechain.models.routing.RouteResponse;
+import me.ranzeplay.messagechain.models.MessageChainDeveloperConfig;
+import me.ranzeplay.messagechain.models.routing.*;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.client.MinecraftClient;
@@ -59,13 +57,14 @@ public class LocalRequestManager {
         // Wait for response
         var obj = requestMap.get(id);
         synchronized (obj) {
-            obj.wait();
+            obj.wait(MessageChain.CONFIG.timeoutMilliseconds());
         }
 
         var response = requestMap.get(id);
         requestMap.remove(id);
 
-        return (RouteResponse<TSuccess, TFail>) response.getResponseData();
+        var responseData = (RouteResponse<TSuccess, TFail>) response.getResponseData();
+        return Objects.requireNonNullElseGet(responseData, () -> RouteResponse.fail(RouteFailResponse.timedOut(failClass), successClass));
     }
 
     /**
