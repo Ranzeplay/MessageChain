@@ -19,7 +19,7 @@ public class ExampleRouteTest extends AbstractRouteExecutor<ExampleData, Example
         RemoteRouteManager.getInstance().registerRoute(new RouteHandler<>(ExampleData.class, ExampleData.class, ExampleData.class, ROUTE_IDENTIFIER, new ExampleRouteTest()));
     }
 
-    public static void configureClientSide() {
+    public static void setupClientSide() {
         registerCommands();
     }
 
@@ -27,11 +27,11 @@ public class ExampleRouteTest extends AbstractRouteExecutor<ExampleData, Example
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess)
                 -> dispatcher.register(ClientCommandManager.literal("msgc_test_routing")
                 .executes(context -> {
-                    LocalRequestManager.getInstance().sendThreadedRequest(ROUTE_IDENTIFIER, new ExampleData("expected to fail", false), ExampleData.class, ExampleData.class,
+                    LocalRequestManager.getInstance().sendThreadedRequest(ROUTE_IDENTIFIER, new ExampleData("expected to fail", true), ExampleData.class, ExampleData.class,
                             response -> Objects.requireNonNull(MinecraftClient.getInstance().player)
                                     .sendMessage(Text.literal(response.getSuccessResponse().getMessage()))
                     );
-                    LocalRequestManager.getInstance().sendThreadedRequest(ROUTE_IDENTIFIER, new ExampleData("expected to success", true), ExampleData.class, ExampleData.class,
+                    LocalRequestManager.getInstance().sendThreadedRequest(ROUTE_IDENTIFIER, new ExampleData("expected to success", false), ExampleData.class, ExampleData.class,
                             response -> Objects.requireNonNull(MinecraftClient.getInstance().player)
                                     .sendMessage(Text.literal(response.getFailResponse().getData().getMessage()))
                     );

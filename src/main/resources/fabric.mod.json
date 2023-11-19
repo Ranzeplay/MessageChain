@@ -6,7 +6,10 @@
   "description": "A Minecraft fabric mod allows developers to interact with server resources like calling web API.",
   "authors": ["Jeb Feng"],
   "contact": {
-    "repo": "https://github.com/Ranzeplay/MessageChain"
+    "repo": "https://github.com/Ranzeplay/MessageChain",
+    "sources": "https://github.com/Ranzeplay/MessageChain",
+    "homepage": "https://msgc.ranzeplay.me",
+    "issues":  "https://github.com/Ranzeplay/MessageChain/issues"
   },
   "license": "Apache-2.0",
   "icon": "assets/messagechain/icon.png",
@@ -37,7 +40,7 @@
         "modmenu.source": "https://github.com/Ranzeplay/MessageChain",
         "modmenu.issues": "https://github.com/Ranzeplay/MessageChain/issues"
       },
-      "badges": ["library", "client", "server"],
+      "badges": ["library"],
       "update_checker": true
     }
   }

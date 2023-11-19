@@ -12,6 +12,10 @@ repositories {
         name 'terraformersmc'
         url "https://maven.terraformersmc.com/releases/"
     }
+    maven {
+        name 'owo'
+        url 'https://maven.wispforest.io'
+    }
 }
 
 dependencies {
@@ -28,6 +32,11 @@ dependencies {
     // Mod menu integration
     modCompileOnly("com.terraformersmc:modmenu:${project.modmenu_version}")
     modLocalRuntime("com.terraformersmc:modmenu:${project.modmenu_version}")
+
+    // owo-lib
+    modImplementation "io.wispforest:owo-lib:${project.owo_version}"
+    include "io.wispforest:owo-sentinel:${project.owo_version}"
+    annotationProcessor modImplementation("io.wispforest:owo-lib:${project.owo_version}")
 
     // Lombok annotator
     compileOnly 'org.projectlombok:lombok:1.18.30'

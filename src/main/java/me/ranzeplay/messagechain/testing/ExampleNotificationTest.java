@@ -12,7 +12,7 @@ import net.minecraft.util.Identifier;
 public class ExampleNotificationTest extends AbstractNotificationHandler<ExampleData> {
     private static final Identifier NOTIFICATION_IDENTIFIER = new Identifier("message_chain.networking.notification", "test");
 
-    public static void configureServerSide() {
+    public static void setupServerSide() {
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, registrationEnvironment)
                 -> dispatcher.register(CommandManager.literal("msgc_test_notification")
                 .executes(context -> {
@@ -22,7 +22,7 @@ public class ExampleNotificationTest extends AbstractNotificationHandler<Example
         ));
     }
 
-    public static void configureClientSide() {
+    public static void setupClientSide() {
         NotificationManager.getInstance().registerHandler(NOTIFICATION_IDENTIFIER, new ExampleNotificationTest(), true);
     }
 

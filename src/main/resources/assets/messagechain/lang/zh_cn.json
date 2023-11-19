@@ -1,0 +1,6 @@
+{
+  "text.config.msgc-dev-config.title": "MessageChain 开发者设置",
+  "text.config.msgc-dev-config.option.enableRoutingTest": "启用Routing功能测试",
+  "text.config.msgc-dev-config.option.enableNotificationTest": "启用Routing功能测试",
+  "text.config.msgc-dev-config.option.timeoutMilliseconds": "超时限制"
+}

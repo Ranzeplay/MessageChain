@@ -1,5 +1,6 @@
 package me.ranzeplay.messagechain.client;
 
+import me.ranzeplay.messagechain.MessageChain;
 import me.ranzeplay.messagechain.managers.notification.NotificationManager;
 import me.ranzeplay.messagechain.managers.routing.LocalRequestManager;
 import me.ranzeplay.messagechain.testing.ExampleNotificationTest;
@@ -12,7 +13,11 @@ public class MessageChainClient implements ClientModInitializer {
         new LocalRequestManager();
         new NotificationManager().registerClientEvents();
 
-        ExampleRouteTest.configureClientSide();
-        ExampleNotificationTest.configureClientSide();
+        if (MessageChain.CONFIG.enableNotificationTest()) {
+            ExampleNotificationTest.setupClientSide();
+        }
+        if (MessageChain.CONFIG.enableRoutingTest()) {
+            ExampleRouteTest.setupClientSide();
+        }
     }
 }
