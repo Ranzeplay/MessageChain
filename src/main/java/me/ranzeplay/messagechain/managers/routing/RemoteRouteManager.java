@@ -1,8 +1,8 @@
 package me.ranzeplay.messagechain.managers.routing;
 
 import me.ranzeplay.messagechain.MessageChain;
-import me.ranzeplay.messagechain.nbtutils.AbstractNBTSerializable;
 import me.ranzeplay.messagechain.models.routing.*;
+import me.ranzeplay.messagechain.nbtutils.AbstractNBTSerializable;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.PacketByteBuf;
@@ -58,11 +58,19 @@ public class RemoteRouteManager {
 
         var route = routeRegistry.get(routeId);
 
-        RouteResponse response;
         if (route == null) {
-            response = RouteResponse.fail(RouteFailResponse.notFound(AbstractNBTSerializable.class), AbstractNBTSerializable.class);
-        } else {
+            var response = RouteResponse.fail(RouteFailResponse.notFound(AbstractNBTSerializable.class), AbstractNBTSerializable.class);
+
+            var packet = new RoutingCommPacket<>(packetId, response);
+            ServerPlayNetworking.send(playerSender, MessageChain.COMM_IDENTIFIER, packet.toPacketByteBuf());
+
+            return;
+        }
+
+        var routine = new Thread(() -> {
+            RouteResponse response;
             AbstractNBTSerializable payloadObjectSuper;
+
             try {
                 payloadObjectSuper = route.getPayloadClazz()
                         .getConstructor()
@@ -76,9 +84,15 @@ public class RemoteRouteManager {
             } catch (Exception e) {
                 response = RouteResponse.fail(RouteFailResponse.internalError(AbstractNBTSerializable.class), AbstractNBTSerializable.class);
             }
-        }
 
-        var packet = new RoutingCommPacket<>(packetId, response);
-        ServerPlayNetworking.send(playerSender, MessageChain.COMM_IDENTIFIER, packet.toPacketByteBuf());
+            var packet = new RoutingCommPacket<>(packetId, response);
+            ServerPlayNetworking.send(playerSender, MessageChain.COMM_IDENTIFIER, packet.toPacketByteBuf());
+        });
+
+        if(route.isThreadedExecution()) {
+            routine.start();
+        } else {
+            routine.run();
+        }
     }
 }

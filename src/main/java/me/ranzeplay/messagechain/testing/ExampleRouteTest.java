@@ -16,7 +16,7 @@ public class ExampleRouteTest extends AbstractRouteExecutor<ExampleData, Example
     private static final Identifier ROUTE_IDENTIFIER = new Identifier("message_chain.networking.route", "test");
 
     public static void configureServerSide() {
-        RemoteRouteManager.getInstance().registerRoute(new RouteHandler<>(ExampleData.class, ExampleData.class, ExampleData.class, ROUTE_IDENTIFIER, new ExampleRouteTest()));
+        RemoteRouteManager.getInstance().registerRoute(new RouteHandler<>(ExampleData.class, ExampleData.class, ExampleData.class, ROUTE_IDENTIFIER, new ExampleRouteTest(), false));
     }
 
     public static void setupClientSide() {

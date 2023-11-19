@@ -16,12 +16,19 @@ public class RouteHandler<TPayload extends AbstractNBTSerializable, TSuccess ext
     Class<TPayload> payloadClazz;
     Class<TSuccess> successClazz;
     Class<TFail> failClazz;
+
     /**
      * The route of the handler. Just like a URL.
      */
     Identifier route;
+
     /**
      * Actions when receiving data from a connected client.
      */
     AbstractRouteExecutor action;
+
+    /**
+     * Create another thread to handle the route
+     */
+    boolean threadedExecution;
 }
