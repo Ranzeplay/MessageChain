@@ -1,0 +1,59 @@
+---
+sidebar_position: 3
+---
+
+# Notification
+
+:::info
+
+Since v0.2-beta
+
+:::
+
+<details>
+<summary>Why use the notification system provided by MessageChain?</summary>
+
+It might be not so useful, 
+but I think it would be better to use different methods to process different messages, 
+Instead of putting them altogether by invoking `ServerPlayNetworking` and `ClientPlayNetworking`.
+
+It will definitely improve code readability.
+</details>
+
+There might be moments when you want to push something to players, so we built a simple notification system.
+
+## Process
+
+In short, refer to this [link](https://github.com/Ranzeplay/MessageChain/tree/v0.2/src/main/java/me/ranzeplay/messagechain/testing) to view the example source code.
+
+### Client-side notification receiver registration
+
+In `NotificationManager`, use the following method to register a notification receiver:
+
+```java
+NotificationManager.getInstance().registerHandler(Identifier, AbstractNotificationHandler, boolean);
+```
+
+The last parameter indicates whether the notification receiver should be removed once it had been invoked.
+
+Be aware that the receiver will run on the main thread instead of creating a new thread, and you have no other options so far.
+
+### Server-side notification push
+
+On server-side, use the following method to push a notification:
+
+```java
+NotificationManager.getInstance().sendNotification(Identifier, TPayload, ServerPlayerEntity);
+```
+
+The receiver must be a game client.
+
+There will be a method to broadcast notification in future version (maybe in v0.3-beta).
+
+### Remove an existing notification handler
+
+To remove an existing notification handler, use the following method:
+
+```java
+NotificationManager.getInstance().unregisterHandler(Identifier);
+```

@@ -69,6 +69,12 @@ const config: Config = {
           label: 'GitHub',
           position: 'right',
         },
+        {
+          type: 'docsVersionDropdown',
+          position: 'right',
+          dropdownItemsAfter: [{to: '/versions', label: 'All versions'}],
+          dropdownActiveClassDisabled: true,
+        },
       ],
     },
     footer: {
