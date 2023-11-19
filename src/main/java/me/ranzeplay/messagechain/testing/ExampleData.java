@@ -1,7 +1,7 @@
 package me.ranzeplay.messagechain.testing;
 
 import lombok.*;
-import me.ranzeplay.messagechain.models.AbstractNBTSerializable;
+import me.ranzeplay.messagechain.nbtutils.AbstractNBTSerializable;
 import me.ranzeplay.messagechain.nbtutils.NBTHelper;
 import me.ranzeplay.messagechain.nbtutils.NBTSerializable;
 import me.ranzeplay.messagechain.nbtutils.NBTSerializationEntry;

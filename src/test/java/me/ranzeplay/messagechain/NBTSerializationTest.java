@@ -2,7 +2,7 @@ package me.ranzeplay.messagechain;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import me.ranzeplay.messagechain.models.AbstractNBTSerializable;
+import me.ranzeplay.messagechain.nbtutils.AbstractNBTSerializable;
 import me.ranzeplay.messagechain.nbtutils.NBTHelper;
 import me.ranzeplay.messagechain.nbtutils.NBTSerializable;
 import me.ranzeplay.messagechain.nbtutils.NBTSerializationEntry;
@@ -10,10 +10,8 @@ import net.minecraft.nbt.NbtCompound;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

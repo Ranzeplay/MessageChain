@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
-import me.ranzeplay.messagechain.models.AbstractNBTSerializable;
+import me.ranzeplay.messagechain.nbtutils.AbstractNBTSerializable;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
 

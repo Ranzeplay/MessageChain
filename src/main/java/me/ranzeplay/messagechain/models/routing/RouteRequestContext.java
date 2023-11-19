@@ -2,7 +2,7 @@ package me.ranzeplay.messagechain.models.routing;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import me.ranzeplay.messagechain.models.AbstractNBTSerializable;
+import me.ranzeplay.messagechain.nbtutils.AbstractNBTSerializable;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;

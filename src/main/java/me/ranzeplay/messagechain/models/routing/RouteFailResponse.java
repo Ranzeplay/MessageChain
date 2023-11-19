@@ -1,7 +1,7 @@
 package me.ranzeplay.messagechain.models.routing;
 
 import lombok.*;
-import me.ranzeplay.messagechain.models.AbstractNBTSerializable;
+import me.ranzeplay.messagechain.nbtutils.AbstractNBTSerializable;
 import net.minecraft.nbt.NbtCompound;
 
 @AllArgsConstructor

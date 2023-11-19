@@ -3,7 +3,7 @@ package me.ranzeplay.messagechain.models.routing;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
-import me.ranzeplay.messagechain.models.AbstractNBTSerializable;
+import me.ranzeplay.messagechain.nbtutils.AbstractNBTSerializable;
 
 import java.util.UUID;
 

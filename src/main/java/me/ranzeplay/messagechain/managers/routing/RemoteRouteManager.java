@@ -1,7 +1,7 @@
 package me.ranzeplay.messagechain.managers.routing;
 
 import me.ranzeplay.messagechain.MessageChain;
-import me.ranzeplay.messagechain.models.AbstractNBTSerializable;
+import me.ranzeplay.messagechain.nbtutils.AbstractNBTSerializable;
 import me.ranzeplay.messagechain.models.routing.*;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;

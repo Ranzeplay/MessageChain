@@ -1,4 +1,4 @@
-package me.ranzeplay.messagechain.models;
+package me.ranzeplay.messagechain.nbtutils;
 
 
 import net.minecraft.nbt.NbtCompound;

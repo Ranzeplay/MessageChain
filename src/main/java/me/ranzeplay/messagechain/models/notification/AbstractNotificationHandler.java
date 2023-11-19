@@ -2,7 +2,7 @@ package me.ranzeplay.messagechain.models.notification;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import me.ranzeplay.messagechain.models.AbstractNBTSerializable;
+import me.ranzeplay.messagechain.nbtutils.AbstractNBTSerializable;
 
 import java.util.function.Consumer;
 
