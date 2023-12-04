@@ -6,10 +6,11 @@ I hope this mod can simplify your development process dealing with networking.
 
 ## Features
 
-- [x] Routing: Merge push and pull actions into one (since v0.1)
-- [x] Notification: Receive server-side notifications (since v0.2)
-- [ ] Data synchronization: Synchronize client-server data (object-based)
-- [ ] PlayerBridge: Communicate directly between players
+- [x] Routing: Merge push and pull actions into one. (since v0.1)
+- [x] Notification: Receive server-side notifications. (since v0.2)
+- [ ] Data synchronization: Synchronize client-server data. (object-based)
+- [ ] PlayerBridge: Communicate directly between players.
+- [ ] Form: Ask player to fill in a form by showing a game screen, transmitting the result back when player finished filling.
 
 ## Testing
 
