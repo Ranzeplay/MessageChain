@@ -1,8 +1,7 @@
-package me.ranzeplay.messagechain.managers.routing;
+package me.ranzeplay.messagechain.routing;
 
 import lombok.SneakyThrows;
-import me.ranzeplay.messagechain.MessageChain;
-import me.ranzeplay.messagechain.models.routing.*;
+import me.ranzeplay.messagechain.init.MessageChainInitializer;
 import me.ranzeplay.messagechain.nbtutils.AbstractNBTSerializable;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
@@ -51,12 +50,12 @@ public class LocalRequestManager {
         requestMap.put(id, new RouteRequestCache<>(id, reqParam, successClass, failClass));
 
         var packet = new RoutingCommPacket<>(id, reqParam);
-        ClientPlayNetworking.send(MessageChain.COMM_IDENTIFIER, packet.toPacketByteBuf());
+        ClientPlayNetworking.send(MessageChainInitializer.COMM_IDENTIFIER, packet.toPacketByteBuf());
 
         // Wait for response
         var obj = requestMap.get(id);
         synchronized (obj) {
-            obj.wait(MessageChain.CONFIG.timeoutMilliseconds());
+            obj.wait(MessageChainInitializer.CONFIG.timeoutMilliseconds());
         }
 
         var response = requestMap.get(id);
@@ -85,7 +84,7 @@ public class LocalRequestManager {
     }
 
     private void registerEvents() {
-        ClientPlayNetworking.registerGlobalReceiver(MessageChain.COMM_IDENTIFIER, this::handleNetworkingResponse);
+        ClientPlayNetworking.registerGlobalReceiver(MessageChainInitializer.COMM_IDENTIFIER, this::handleNetworkingResponse);
     }
 
     @SneakyThrows

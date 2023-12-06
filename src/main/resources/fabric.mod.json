@@ -16,10 +16,10 @@
   "environment": "*",
   "entrypoints": {
     "client": [
-      "me.ranzeplay.messagechain.client.MessageChainClient"
+      "me.ranzeplay.messagechain.init.MessageChainClientInitializer"
     ],
     "main": [
-      "me.ranzeplay.messagechain.MessageChain"
+      "me.ranzeplay.messagechain.init.MessageChainInitializer"
     ]
   },
   "mixins": [

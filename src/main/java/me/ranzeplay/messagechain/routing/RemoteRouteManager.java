@@ -1,7 +1,6 @@
-package me.ranzeplay.messagechain.managers.routing;
+package me.ranzeplay.messagechain.routing;
 
-import me.ranzeplay.messagechain.MessageChain;
-import me.ranzeplay.messagechain.models.routing.*;
+import me.ranzeplay.messagechain.init.MessageChainInitializer;
 import me.ranzeplay.messagechain.nbtutils.AbstractNBTSerializable;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -45,7 +44,7 @@ public class RemoteRouteManager {
     }
 
     private void registerEvents() {
-        ServerPlayNetworking.registerGlobalReceiver(MessageChain.COMM_IDENTIFIER, this::handleNetworking);
+        ServerPlayNetworking.registerGlobalReceiver(MessageChainInitializer.COMM_IDENTIFIER, this::handleNetworking);
     }
 
     // @SneakyThrows
@@ -62,7 +61,7 @@ public class RemoteRouteManager {
             var response = RouteResponse.fail(RouteFailResponse.notFound(AbstractNBTSerializable.class), AbstractNBTSerializable.class);
 
             var packet = new RoutingCommPacket<>(packetId, response);
-            ServerPlayNetworking.send(playerSender, MessageChain.COMM_IDENTIFIER, packet.toPacketByteBuf());
+            ServerPlayNetworking.send(playerSender, MessageChainInitializer.COMM_IDENTIFIER, packet.toPacketByteBuf());
 
             return;
         }
@@ -86,7 +85,7 @@ public class RemoteRouteManager {
             }
 
             var packet = new RoutingCommPacket<>(packetId, response);
-            ServerPlayNetworking.send(playerSender, MessageChain.COMM_IDENTIFIER, packet.toPacketByteBuf());
+            ServerPlayNetworking.send(playerSender, MessageChainInitializer.COMM_IDENTIFIER, packet.toPacketByteBuf());
         });
 
         if(route.isThreadedExecution()) {

@@ -1,4 +1,4 @@
-package me.ranzeplay.messagechain.models;
+package me.ranzeplay.messagechain.config;
 
 import io.wispforest.owo.config.annotation.Config;
 import io.wispforest.owo.config.annotation.Modmenu;
@@ -17,12 +17,16 @@ public class DeveloperConfig {
     @RestartRequired
     public boolean enableNotificationTest;
 
+    @RestartRequired
+    public boolean enableExperimentalFeatures;
+
     @RangeConstraint(min = 0, max = 5000)
     public int timeoutMilliseconds;
 
     public DeveloperConfig() {
         enableNotificationTest = false;
         enableRoutingTest = false;
+        enableExperimentalFeatures = false;
         timeoutMilliseconds = 2000;
     }
 }

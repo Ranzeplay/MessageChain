@@ -1,9 +1,9 @@
 package me.ranzeplay.messagechain.testing;
 
 import com.mojang.brigadier.Command;
-import me.ranzeplay.messagechain.managers.routing.LocalRequestManager;
-import me.ranzeplay.messagechain.managers.routing.RemoteRouteManager;
-import me.ranzeplay.messagechain.models.routing.*;
+import me.ranzeplay.messagechain.routing.LocalRequestManager;
+import me.ranzeplay.messagechain.routing.RemoteRouteManager;
+import me.ranzeplay.messagechain.routing.*;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.minecraft.client.MinecraftClient;

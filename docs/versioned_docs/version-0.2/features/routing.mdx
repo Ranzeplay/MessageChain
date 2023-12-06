@@ -83,7 +83,7 @@ MessageChain will setup a `RemoteRouteManager` on initialization. To register yo
 RemoteRouteManager.getInstance().registerRoute(routeHandler);
 ```
 
-Parameter `routeHandler` is a `me.ranzeplay.messagechain.models.routing.RouteHandler` instance, which consists of the type of payload,
+Parameter `routeHandler` is a `me.ranzeplay.messagechain.routing.RouteHandler` instance, which consists of the type of payload,
 the type of data returned when successfully processed the request, data type returned when failed to process it, the path of the route,
 and also the actions to process the request. Constructor as follows:
 

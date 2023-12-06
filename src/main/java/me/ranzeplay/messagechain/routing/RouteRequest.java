@@ -1,4 +1,4 @@
-package me.ranzeplay.messagechain.models.routing;
+package me.ranzeplay.messagechain.routing;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

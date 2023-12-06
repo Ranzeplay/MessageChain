@@ -1,9 +1,7 @@
-package me.ranzeplay.messagechain.managers.notification;
+package me.ranzeplay.messagechain.notification;
 
 import lombok.SneakyThrows;
 import me.ranzeplay.messagechain.nbtutils.AbstractNBTSerializable;
-import me.ranzeplay.messagechain.models.notification.AbstractNotificationHandler;
-import me.ranzeplay.messagechain.models.notification.NotificationHandlerWrapper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;

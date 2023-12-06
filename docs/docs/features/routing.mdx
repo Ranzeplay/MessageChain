@@ -83,7 +83,7 @@ MessageChain will set up a `RemoteRouteManager` on initialization. To register y
 RemoteRouteManager.getInstance().registerRoute(routeHandler);
 ```
 
-Parameter `routeHandler` is a `me.ranzeplay.messagechain.models.routing.RouteHandler` instance, which consists of the type of payload,
+Parameter `routeHandler` is a `me.ranzeplay.messagechain.routing.RouteHandler` instance, which consists of the type of payload,
 the type of data returned when successfully processed the request, the type of data returned when failed to process the request and the path of the route,
 and also the actions to process the request. Constructor as follows:
 
@@ -118,7 +118,7 @@ LocalRequestManager.getInstance().sendThreadedRequest(Identifier, TPayload, Clas
 
 ### Server-side route handling
 
-Once the request has been sent to server, MessageChain will check if the Route does exist. If not, a `RouteFailResponse` with the reason `FailType.ROUTE_NOT_FOUND` will be sent back.
+Once the request has been sent to the server, MessageChain will check if the Route does exist. If not, a `RouteFailResponse` with the reason `FailType.ROUTE_NOT_FOUND` will be sent back.
 Otherwise, your code will kick in.
 
 Your code will be invoked with a `RouteRequestContext` containing request data, Minecraft server instance, sender information, and other uncommon information for you to use.

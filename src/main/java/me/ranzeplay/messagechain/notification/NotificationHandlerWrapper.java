@@ -1,4 +1,4 @@
-package me.ranzeplay.messagechain.models.notification;
+package me.ranzeplay.messagechain.notification;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
