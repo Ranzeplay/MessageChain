@@ -1,8 +1,6 @@
 package me.ranzeplay.messagechain.form;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.util.ArrayList;
 
