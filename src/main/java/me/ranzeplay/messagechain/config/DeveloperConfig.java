@@ -16,6 +16,8 @@ public class DeveloperConfig {
     public boolean enableRoutingTest;
     @RestartRequired
     public boolean enableNotificationTest;
+    @RestartRequired
+    public boolean enableFormTest;
 
     @RestartRequired
     public boolean enableExperimentalFeatures;
@@ -27,6 +29,7 @@ public class DeveloperConfig {
         enableNotificationTest = false;
         enableRoutingTest = false;
         enableExperimentalFeatures = false;
+        enableFormTest = false;
         timeoutMilliseconds = 2000;
     }
 }

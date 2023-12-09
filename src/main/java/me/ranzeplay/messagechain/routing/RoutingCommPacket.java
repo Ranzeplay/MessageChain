@@ -16,7 +16,7 @@ import java.util.UUID;
  */
 @AllArgsConstructor
 @Getter
-public class RoutingCommPacket<T extends AbstractNBTSerializable> {
+class RoutingCommPacket<T extends AbstractNBTSerializable> {
     /**
      * Packet ID, used to uniquely identify packets, which is used to trace response from the server.
      */

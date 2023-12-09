@@ -4,6 +4,7 @@ import me.ranzeplay.messagechain.notification.NotificationManager;
 import me.ranzeplay.messagechain.routing.LocalRequestManager;
 import me.ranzeplay.messagechain.testing.ExampleNotificationTest;
 import me.ranzeplay.messagechain.testing.ExampleRouteTest;
+import me.ranzeplay.messagechain.testing.ExampleFormTest;
 import net.fabricmc.api.ClientModInitializer;
 
 public class MessageChainClientInitializer implements ClientModInitializer {
@@ -17,6 +18,9 @@ public class MessageChainClientInitializer implements ClientModInitializer {
         }
         if (MessageChainInitializer.CONFIG.enableRoutingTest()) {
             ExampleRouteTest.setupClientSide();
+        }
+        if (MessageChainInitializer.CONFIG.enableFormTest()) {
+            ExampleFormTest.setupClientSide();
         }
     }
 }

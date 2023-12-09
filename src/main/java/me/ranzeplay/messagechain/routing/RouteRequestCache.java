@@ -8,7 +8,7 @@ import me.ranzeplay.messagechain.nbtutils.AbstractNBTSerializable;
 import java.util.UUID;
 
 @Getter
-public class RouteRequestCache<TPayload extends AbstractNBTSerializable, TSuccess extends AbstractNBTSerializable, TFail extends AbstractNBTSerializable> {
+class RouteRequestCache<TPayload extends AbstractNBTSerializable, TSuccess extends AbstractNBTSerializable, TFail extends AbstractNBTSerializable> {
     Class<TPayload> payloadClass;
     Class<TSuccess> successClass;
     Class<TFail> failClass;

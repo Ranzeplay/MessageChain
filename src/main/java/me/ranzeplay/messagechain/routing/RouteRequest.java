@@ -17,7 +17,7 @@ import java.lang.reflect.ParameterizedType;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class RouteRequest<TPayload extends AbstractNBTSerializable> extends AbstractNBTSerializable {
+class RouteRequest<TPayload extends AbstractNBTSerializable> extends AbstractNBTSerializable {
     Identifier route;
     TPayload payload;
 

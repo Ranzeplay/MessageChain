@@ -2,6 +2,7 @@
   "text.config.msgc-dev-config.title": "MessageChain developer settings",
   "text.config.msgc-dev-config.option.enableRoutingTest": "Enable Routing feature test",
   "text.config.msgc-dev-config.option.enableNotificationTest": "Enable Notification feature test",
+  "text.config.msgc-dev-config.option.enableFormTest": "Enable Form test",
   "text.config.msgc-dev-config.option.timeoutMilliseconds": "MessageChain connection timeout in milliseconds",
   "text.config.msgc-dev-config.option.enableExperimentalFeatures": "Enable experimental features"
 }
