@@ -2,6 +2,7 @@ package me.ranzeplay.messagechain.form;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.widget.Widget;
 import org.apache.commons.lang3.NotImplementedException;
 
@@ -14,7 +15,7 @@ public abstract class AbstractFormComponent {
     Object defaultValue;
     boolean isEnabled;
 
-    public Widget draw() {
+    public Widget draw(int width, TextRenderer renderer) {
         throw new NotImplementedException();
     }
 }
