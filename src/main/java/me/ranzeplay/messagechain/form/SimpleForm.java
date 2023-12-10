@@ -20,6 +20,6 @@ public class SimpleForm {
     @Environment(EnvType.CLIENT)
     public void show() {
         var client = MinecraftClient.getInstance();
-        client.send(() -> client.setScreen(new FormScreen(this)));
+        client.send(() -> client.setScreen(new AdvancedFormScreen(this)));
     }
 }

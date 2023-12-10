@@ -14,8 +14,11 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import org.jetbrains.annotations.NotNull;
 
+import java.lang.ref.Reference;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
+@Deprecated
 @Environment(EnvType.CLIENT)
 public class FormScreen extends Screen {
     final int LIST_SPACING = 6;
@@ -25,12 +28,9 @@ public class FormScreen extends Screen {
     int lastHeight = 0;
     GridWidget grid;
 
-    ArrayList<ArrayList<Widget>> pagedComponents;
+    ArrayList<Widget> components;
+    ArrayList<ArrayList<WeakReference<Widget>>> pagedComponents;
     int showingPage = 0;
-
-    protected FormScreen(Text title) {
-        super(title);
-    }
 
     public FormScreen(SimpleForm form) {
         super(Text.literal(form.title));
@@ -40,6 +40,24 @@ public class FormScreen extends Screen {
 
     @Override
     protected void init() {
+        if (this.components == null) {
+            this.components = new ArrayList<>();
+
+            for (var component : form.components) {
+                var widget = component.draw(width - 20, this.textRenderer);
+
+                var sectionGrid = new GridWidget()
+                        .setSpacing(4);
+                var sectionAdder = sectionGrid.createAdder(1);
+                var caption = new TextWidget(Text.literal(component.name), this.textRenderer);
+                sectionAdder.add(caption);
+                sectionAdder.add(widget);
+                sectionGrid.refreshPositions();
+
+                components.add(sectionGrid);
+            }
+        }
+
         grid = new GridWidget()
                 .setSpacing(10);
         grid.getMainPositioner()
@@ -91,27 +109,19 @@ public class FormScreen extends Screen {
     private void updatePages(final int availableHeight) {
         pagedComponents.clear();
         int usedHeight = 0;
-        var currentPageElements = new ArrayList<Widget>();
-        for (var component : form.components) {
-            var widget = component.draw(width - 20, this.textRenderer);
-
-            var sectionGrid = new GridWidget()
-                    .setSpacing(4);
-            var sectionAdder = sectionGrid.createAdder(1);
-            var caption = new TextWidget(Text.literal(component.name), this.textRenderer);
-            sectionAdder.add(caption);
-            sectionAdder.add(widget);
-            sectionGrid.refreshPositions();
-
+        var currentPageElements = new ArrayList<WeakReference<Widget>>();
+        for (var sectionGrid : components) {
             if (usedHeight + sectionGrid.getHeight() > availableHeight) {
                 pagedComponents.add(currentPageElements);
                 currentPageElements = new ArrayList<>();
             } else {
-                currentPageElements.add(sectionGrid);
+                currentPageElements.add(new WeakReference<>(sectionGrid));
                 usedHeight += sectionGrid.getHeight() + LIST_SPACING;
             }
         }
-        pagedComponents.add(currentPageElements);
+        if (!currentPageElements.isEmpty()) {
+            pagedComponents.add(currentPageElements);
+        }
     }
 
     private @NotNull GridWidget addHeader() {
@@ -145,7 +155,8 @@ public class FormScreen extends Screen {
         var listGrid = new GridWidget()
                 .setSpacing(LIST_SPACING);
         var listAdder = listGrid.createAdder(1);
-        pagedComponents.get(showingPage).forEach(listAdder::add);
+        pagedComponents.get(showingPage).stream().map(Reference::get).forEach(listAdder::add);
+
         listGrid.refreshPositions();
 
         return listGrid;
@@ -157,13 +168,13 @@ public class FormScreen extends Screen {
         var adder = pageGrid.createAdder(2);
 
         var prevButton = ButtonWidget.builder(Text.literal("Prev"), this::prevPage).build();
-        if(showingPage == 0) {
+        if (showingPage == 0) {
             prevButton.active = false;
         }
         adder.add(prevButton);
 
         var nextButton = ButtonWidget.builder(Text.literal("Next"), this::nextPage).build();
-        if(showingPage == pagedComponents.size() - 1) {
+        if (showingPage == pagedComponents.size() - 1) {
             nextButton.active = false;
         }
         adder.add(nextButton);

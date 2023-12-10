@@ -21,6 +21,7 @@ public abstract class AbstractNBTSerializable {
 
     /**
      * Loads current object instance with NBT data.
+     *
      * @param nbt Source data
      */
     public abstract void fromNbt(NbtCompound nbt);
@@ -32,6 +33,7 @@ public abstract class AbstractNBTSerializable {
 
     /**
      * Get implemented class
+     *
      * @return Implemented
      */
     public abstract Class<?> getGenericClass();

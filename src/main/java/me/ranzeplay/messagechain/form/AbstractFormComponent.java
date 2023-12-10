@@ -1,10 +1,12 @@
 package me.ranzeplay.messagechain.form;
 
+import io.wispforest.owo.ui.core.Component;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.widget.Widget;
-import org.apache.commons.lang3.NotImplementedException;
+
+import java.util.Collection;
 
 @Getter
 @AllArgsConstructor
@@ -15,7 +17,7 @@ public abstract class AbstractFormComponent {
     Object defaultValue;
     boolean isEnabled;
 
-    public Widget draw(int width, TextRenderer renderer) {
-        throw new NotImplementedException();
-    }
+    public abstract Widget draw(int width, TextRenderer renderer);
+
+    public abstract Collection<Component> getUIComponent();
 }
