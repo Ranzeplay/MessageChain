@@ -1,5 +1,6 @@
 package me.ranzeplay.messagechain.form;
 
+import jdk.jfr.Experimental;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import net.fabricmc.api.EnvType;
@@ -8,6 +9,7 @@ import net.minecraft.client.MinecraftClient;
 
 import java.util.ArrayList;
 
+@Experimental
 @Getter
 @AllArgsConstructor
 public class SimpleForm {

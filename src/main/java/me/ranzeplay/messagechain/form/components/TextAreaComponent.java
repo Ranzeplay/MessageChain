@@ -4,6 +4,7 @@ import io.wispforest.owo.ui.component.Components;
 import io.wispforest.owo.ui.core.Component;
 import io.wispforest.owo.ui.core.Insets;
 import io.wispforest.owo.ui.core.Sizing;
+import jdk.jfr.Experimental;
 import me.ranzeplay.messagechain.form.AbstractFormComponent;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.widget.EditBoxWidget;
@@ -13,6 +14,7 @@ import net.minecraft.text.Text;
 import java.util.ArrayList;
 import java.util.Collection;
 
+@Experimental
 public class TextAreaComponent extends AbstractFormComponent {
     Text placeholder;
     Text text;

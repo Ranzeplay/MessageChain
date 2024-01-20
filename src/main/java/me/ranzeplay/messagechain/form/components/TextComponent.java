@@ -3,6 +3,7 @@ package me.ranzeplay.messagechain.form.components;
 import io.wispforest.owo.ui.component.Components;
 import io.wispforest.owo.ui.core.Component;
 import io.wispforest.owo.ui.core.Insets;
+import jdk.jfr.Experimental;
 import lombok.Getter;
 import lombok.Setter;
 import me.ranzeplay.messagechain.form.AbstractFormComponent;
@@ -14,6 +15,7 @@ import net.minecraft.text.Text;
 import java.util.Collection;
 import java.util.Collections;
 
+@Experimental
 @Getter
 @Setter
 public class TextComponent extends AbstractFormComponent {

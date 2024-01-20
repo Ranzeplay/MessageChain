@@ -1,10 +1,10 @@
 package me.ranzeplay.messagechain.form.components;
 
-import io.wispforest.owo.ui.base.BaseOwoScreen;
 import io.wispforest.owo.ui.component.Components;
 import io.wispforest.owo.ui.core.Component;
 import io.wispforest.owo.ui.core.Insets;
 import io.wispforest.owo.ui.core.Sizing;
+import jdk.jfr.Experimental;
 import me.ranzeplay.messagechain.form.AbstractFormComponent;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.widget.TextFieldWidget;
@@ -12,11 +12,10 @@ import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
-import java.lang.ref.Reference;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 
+@Experimental
 public class TextBoxComponent extends AbstractFormComponent {
     String text;
 

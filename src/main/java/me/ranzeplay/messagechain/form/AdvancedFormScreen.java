@@ -6,13 +6,16 @@ import io.wispforest.owo.ui.component.Components;
 import io.wispforest.owo.ui.container.Containers;
 import io.wispforest.owo.ui.container.FlowLayout;
 import io.wispforest.owo.ui.container.ScrollContainer;
+import io.wispforest.owo.ui.container.StackLayout;
 import io.wispforest.owo.ui.core.*;
+import jdk.jfr.Experimental;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
+@Experimental
 public class AdvancedFormScreen extends BaseOwoScreen<FlowLayout> {
     SimpleForm form;
 
@@ -40,6 +43,8 @@ public class AdvancedFormScreen extends BaseOwoScreen<FlowLayout> {
                 rootComponent.child(c);
             });
         }
+
+        var box = Containers.verticalScroll(Sizing.fill(80), Sizing.fill(80), Components.box(Sizing.content(), Sizing.content()));
 
         // rootComponent.child(container);
 
