@@ -24,7 +24,7 @@ public class CheckboxComponent extends AbstractFormComponent {
 
     @Override
     public Widget draw(int width, TextRenderer renderer) {
-        return new CheckboxWidget(0, 0, width, 20, Text.literal(this.getCaption()), isChecked);
+        return Components.checkbox(Text.of(getCaption()));
     }
 
     @Override
