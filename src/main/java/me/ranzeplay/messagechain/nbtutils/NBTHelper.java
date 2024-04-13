@@ -1,5 +1,6 @@
 package me.ranzeplay.messagechain.nbtutils;
 
+import com.google.gson.Gson;
 import lombok.SneakyThrows;
 import net.minecraft.nbt.*;
 
@@ -216,5 +217,18 @@ public class NBTHelper {
         field.setAccessible(true);
         var entryAnnotation = field.getAnnotation(NBTSerializationEntry.class);
         return Objects.equals(entryAnnotation.key(), "") ? field.getName() : entryAnnotation.key();
+    }
+
+    public static NbtCompound serializeUsingJson(Object source) {
+        var result = new NbtCompound();
+        var json = new Gson().toJson(source);
+        result.putString("json", json);
+
+        return result;
+    }
+
+    public static <T> T deserializeUsingJson(NbtCompound nbt, Class<T> targetType) {
+        var json = nbt.getString("json");
+        return new Gson().fromJson(json, targetType);
     }
 }
