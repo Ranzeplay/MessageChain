@@ -1,5 +1,5 @@
 plugins {
-    id 'fabric-loom' version '1.6.3'
+    id 'fabric-loom' version '1.7.4'
     id 'maven-publish'
 }
 
@@ -14,7 +14,7 @@ repositories {
     }
     maven {
         name 'owo'
-        url 'https://maven.wispforest.io'
+        url 'https://maven.wispforest.io/releases/'
     }
 }
 
